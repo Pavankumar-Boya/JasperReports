@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Avi-VendorMaster" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1300d29f-703d-41b2-a103-725f0b6c9575">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Matsers"/>
+	<property name="ireport.jasperserver.url" value="https://avision-report.getapcs.com/jasperserver/"/>
+	<property name="ireport.jasperserver.user" value="jasperadmin"/>
+	<property name="ireport.jasperserver.report.resource" value="/reports/AvisionReports/Avi_VendorMaster_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/AvisionReports/Avi_VendorMaster"/>
+	<parameter name="vendorName" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+    vm.VendorName,
+    vm.VendorId,
+    vm.GST,
+    vm.PAN,
+    vm.Address,
+      CASE
+        WHEN vm.GeneralMSME = 1 THEN 'YES'
+        ELSE 'NO'
+    END AS GeneralMSMEm,
+    GROUP_CONCAT(DISTINCT vmc.MobileNumber) AS contactdetails,
+    GROUP_CONCAT(DISTINCT vmc.Email) AS EmailList,
+    vmb.BankName,
+    vmb.AccountNumber,
+    vmb.IFSCCode,
+    vadd.GSTNNumber,
+    vadd.PANNumber,
+    GROUP_CONCAT(DISTINCT vmb.Branch) AS BranchList,
+    GROUP_CONCAT(DISTINCT vmb.Branch) AS branchaddress
+FROM
+    avision_getapcs_master.vendormasters AS vm
+LEFT JOIN avision_getapcs_master.vendorbankings AS vmb ON vmb.VendorMasterId = vm.Id
+LEFT JOIN avision_getapcs_master.addresses AS vadd on vadd.VendorMasterId = vm.Id
+LEFT JOIN avision_getapcs_master.contact AS vmc ON vmc.VendorMasterId = vm.Id
+where vm.VendorName =$P{vendorName}
+GROUP BY
+   
+    vmb.BankName,
+    vmb.AccountNumber,
+    vmb.IFSCCode,
+    vadd.GSTNNumber,
+    vadd.PANNumber,
+       vm.VendorName,
+    vm.VendorId,
+    vm.GST,
+    vm.PAN,
+    vm.Address,
+    GeneralMSMEm]]>
+	</queryString>
+	<field name="VendorName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VendorName"/>
+		<property name="com.jaspersoft.studio.field.label" value="VendorName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vendormasters"/>
+	</field>
+	<field name="VendorId" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VendorId"/>
+		<property name="com.jaspersoft.studio.field.label" value="VendorId"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vendormasters"/>
+	</field>
+	<field name="GST" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="GST"/>
+		<property name="com.jaspersoft.studio.field.label" value="GST"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vendormasters"/>
+	</field>
+	<field name="PAN" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="PAN"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAN"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vendormasters"/>
+	</field>
+	<field name="Address" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Address"/>
+		<property name="com.jaspersoft.studio.field.label" value="Address"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vendormasters"/>
+	</field>
+	<field name="GeneralMSMEm" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="GeneralMSMEm"/>
+		<property name="com.jaspersoft.studio.field.label" value="GeneralMSMEm"/>
+	</field>
+	<field name="contactdetails" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="contactdetails"/>
+		<property name="com.jaspersoft.studio.field.label" value="contactdetails"/>
+	</field>
+	<field name="EmailList" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="EmailList"/>
+		<property name="com.jaspersoft.studio.field.label" value="EmailList"/>
+	</field>
+	<field name="BankName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="BankName"/>
+		<property name="com.jaspersoft.studio.field.label" value="BankName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vendorbankings"/>
+	</field>
+	<field name="AccountNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="AccountNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="AccountNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vendorbankings"/>
+	</field>
+	<field name="IFSCCode" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="IFSCCode"/>
+		<property name="com.jaspersoft.studio.field.label" value="IFSCCode"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vendorbankings"/>
+	</field>
+	<field name="GSTNNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="GSTNNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="GSTNNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="addresses"/>
+	</field>
+	<field name="PANNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PANNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="PANNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="addresses"/>
+	</field>
+	<field name="BranchList" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="BranchList"/>
+		<property name="com.jaspersoft.studio.field.label" value="BranchList"/>
+	</field>
+	<field name="branchaddress" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="branchaddress"/>
+		<property name="com.jaspersoft.studio.field.label" value="branchaddress"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="383" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<rectangle>
+				<reportElement x="2" y="2" width="550" height="35" uuid="10753cf0-9339-4489-9bca-3c2c3db5260d">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="2" y="37" width="550" height="23" uuid="d2a45dfc-52fb-4669-a511-db865ac720f0">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="151" y="9" width="256" height="24" uuid="0e69e7ad-9d38-4470-a8b5-cd29d56da7ad"/>
+				<textElement textAlignment="Center">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VENDOR REPORT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="150" y="36" width="276" height="22" uuid="b97e1763-21de-4bbc-9b43-c62540f930e8"/>
+				<textElement textAlignment="Center">
+					<font size="16" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Emp / Vendor Details]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="2" y="60" width="550" height="180" uuid="0067de6d-4810-4f9f-91dc-b7d57ec0fe43">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</rectangle>
+			<line>
+				<reportElement x="39" y="60" width="1" height="179" uuid="e37bc789-611e-424c-95f5-abea45cb6db9"/>
+			</line>
+			<line>
+				<reportElement x="184" y="60" width="1" height="179" uuid="0f940b67-1c34-4e4f-b931-f731c1dd37ab"/>
+			</line>
+			<staticText>
+				<reportElement x="39" y="63" width="120" height="16" uuid="4f3b1686-98fe-4132-a63e-97d434b6566b"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Emp / Vendor Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="37" y="83" width="106" height="20" uuid="fd19d58c-5556-4b0a-820a-b5646ce81ef3"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Emp / Vendor Id]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="47" y="143" width="48" height="20" uuid="97fb6a52-840c-48b2-aa3e-ee2dc045afae"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[PAN No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="37" y="103" width="127" height="17" uuid="ddc59c83-9ff8-49bf-a591-43e358ca4efe"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Date of Joining(DOJ)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="44" y="122" width="40" height="20" uuid="31a95d46-8a08-425b-93e2-a667eb0eca0d"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[GST]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="46" y="161" width="84" height="20" uuid="9845768a-cea8-4c2e-97d0-b4efc5c2c28b"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[MSME Reg No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="45" y="178" width="54" height="30" uuid="e97f469e-0108-40b5-beb4-2c0a9a7a5706"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Address]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="47" y="207" width="80" height="17" uuid="849acf27-ea3f-4acb-b943-f048edddf4fb"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Contact Details]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="43" y="222" width="60" height="18" uuid="299fc3d5-2dd1-4759-b04a-e9aeadd44964"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[E-Mail ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="62" width="14" height="18" uuid="8446dd09-48a5-4308-886b-b2ca6e7bf964"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="83" width="14" height="18" uuid="2687090a-863e-43df-9883-a5cde5c080db"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="102" width="14" height="18" uuid="f19f6201-8308-4726-954c-02c213c18d68"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[3]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="121" width="14" height="18" uuid="b46d7132-18bf-4ddf-be99-c1107ff98cb2"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[4]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="143" width="14" height="18" uuid="105939a6-c0c3-467c-8035-5fdf603b76c3"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[5]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="162" width="14" height="18" uuid="23e847e5-17fe-48ab-8999-727524877895"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[6]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="182" width="14" height="18" uuid="55e95382-82b8-4ce7-bb5d-cb38cbb3fbaa"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[7]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="204" width="14" height="18" uuid="d66e0400-6f7c-40a3-89c6-bc895aec915f"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[8]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="222" width="14" height="18" uuid="6aaa4179-2a48-4c17-82c6-f4a2f53e48ca"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[9]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="190" y="206" width="328" height="16" uuid="edf34beb-16ac-402b-b656-ede1a420fe24"/>
+				<textFieldExpression><![CDATA[$F{contactdetails}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="190" y="221" width="328" height="17" uuid="38121ee0-c9b2-4a8e-b061-95051470bd37"/>
+				<textFieldExpression><![CDATA[$F{EmailList}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="189" y="179" width="363" height="27" uuid="54dd6d8b-4d46-4817-ac0e-804b1015bc27"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Address}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="189" y="142" width="330" height="16" uuid="6126947b-b67f-4de0-a566-036ad39cc17e"/>
+				<textFieldExpression><![CDATA[$F{PANNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="189" y="121" width="330" height="16" uuid="cda27922-054b-4403-9313-77f82b3964dd"/>
+				<textFieldExpression><![CDATA[$F{GSTNNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="189" y="83" width="330" height="16" uuid="edc8e4b7-15a3-4a81-b535-bff57d881ec4"/>
+				<textFieldExpression><![CDATA[$F{VendorId}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="189" y="63" width="330" height="16" uuid="b6961682-9bc8-45ce-b0e6-9fc8a838db2c"/>
+				<textFieldExpression><![CDATA[$F{VendorName}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="2" y="240" width="550" height="24" uuid="964515db-7393-4eda-b16f-6e9acaaec9da"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="171" y="240" width="202" height="24" uuid="8f35de28-d9fe-46c7-8c7e-cba57d8c9eed"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold" size="16"/>
+				</textElement>
+				<text><![CDATA[Banking Details]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="2" y="262" width="550" height="100" uuid="65d299fa-d952-4062-ad3a-820bcfe35e57">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</rectangle>
+			<line>
+				<reportElement x="40" y="264" width="1" height="98" uuid="2f9a87d3-3def-4d21-9c9d-a8c39ff0a153"/>
+			</line>
+			<line>
+				<reportElement x="184" y="262" width="1" height="100" uuid="b63ea36e-828d-45a2-91cd-0b6230df191b"/>
+			</line>
+			<staticText>
+				<reportElement x="44" y="264" width="72" height="20" uuid="bb8ce2b8-b86a-433b-a415-e9eb19b2f52c"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Bank Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="42" y="285" width="54" height="20" uuid="802d4347-a6ed-4ab7-bf98-7e2691a1a1e7"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[A/C No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="43" y="304" width="68" height="20" uuid="c28cf0e9-dd07-4883-8a6b-e939f16daa32"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[IFSC Code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="43" y="324" width="52" height="17" uuid="8c8bc78c-9cf1-4d61-ba16-e1ca0b7c5ecd"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Branch]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="41" y="341" width="96" height="15" uuid="e83904de-138f-4d32-959e-9db47dbe0577"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Branch Address]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="189" y="264" width="330" height="16" uuid="d234be0c-07f3-427b-9886-7c77525c8e8b"/>
+				<textFieldExpression><![CDATA[$F{BankName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="189" y="284" width="330" height="16" uuid="72c18bfc-7731-4cb1-807b-937caa1de6a7"/>
+				<textFieldExpression><![CDATA[$F{AccountNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="189" y="304" width="330" height="16" uuid="46a1d932-5669-4a6c-ba69-b0353d0ace31"/>
+				<textFieldExpression><![CDATA[$F{IFSCCode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="189" y="322" width="330" height="19" uuid="1f4b2925-f279-4158-b98d-c22136ffab2e"/>
+				<textFieldExpression><![CDATA[$F{BranchList}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="189" y="340" width="330" height="22" uuid="7bcd0898-b145-4360-a706-2f628b431cc2"/>
+				<textFieldExpression><![CDATA[$F{branchaddress}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="265" width="14" height="18" uuid="8e0880b8-faae-4391-a728-8ee05696b3a2"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[10]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="304" width="14" height="18" uuid="5a5d4046-f035-4d76-b833-d109b2d105d5"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[12]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="284" width="14" height="18" uuid="304a382b-90b5-4d71-a029-e3567f03848c"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[11]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="325" width="14" height="18" uuid="75ee84dd-7671-4ee9-a002-be9d42c23de2"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[13]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="344" width="14" height="18" uuid="ff7c984f-9b9c-47d8-ac9a-e3d34ba26bb0"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[14]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="2" y="362" width="550" height="20" uuid="7584e975-e00e-407b-8dea-eb81a2b4fe9a"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="3" y="365" width="145" height="15" uuid="378fc1a4-26cd-4f79-a57e-b13a8fce90aa"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Emp / Vendor Signature   :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="206" y="366" width="93" height="16" uuid="969841c4-26ab-4ac8-93a7-59b52bfaaf79"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Verified By  :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="364" width="103" height="16" uuid="3960e0a8-024b-471e-94d7-e06d7f04673e"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Approved By  :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="190" y="102" width="127" height="17" uuid="e0100b63-f6ff-46cd-8d59-f58a7c68a2eb"/>
+				<textElement textAlignment="Left">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[-]]></text>
+			</staticText>
+			<image>
+				<reportElement x="4" y="4" width="130" height="31" uuid="1a7483e4-c15d-47e1-b795-606a472fbd22"/>
+				<imageExpression><![CDATA["C:/K-Rep/Screenshot (9).png"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="189" y="161" width="330" height="16" uuid="35aea75b-5def-42f1-85e5-9b036ddf253b"/>
+				<textFieldExpression><![CDATA[$F{GeneralMSMEm}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+</jasperReport>

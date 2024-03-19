@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MR-Avi" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="22a40266-5cb5-40a5-9e95-4315e80bbac3">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SoMi"/>
+	<property name="ireport.jasperserver.url" value="https://avision-report.getapcs.com/jasperserver/"/>
+	<property name="ireport.jasperserver.user" value="jasperadmin"/>
+	<property name="ireport.jasperserver.report.resource" value="/reports/AvisionReports/MR_Avi_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/AvisionReports/MR_Avi"/>
+	<parameter name="mrNumber" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[select 
+mr.MRNumber,
+mr.ProjectNumber,
+mr.CreatedBy,
+mr.LastModifiedBy,
+mri.PartNumber,
+mri.PartDescription,
+mri.RequiredQty,
+msd.Location,
+im.Uom,
+ia.ManufacturerPartNo,
+sum(msd.Qty) as issuedQty,
+ DATE_FORMAT(mr.LastModifiedOn, '%d-%b-%Y') AS lastDATE,
+im.Department
+ from avision_getapcs_production.materialrequests AS mr
+ LEFT JOIN avision_getapcs_production.materialrequestitems AS mri ON
+ mr.Id = mri.MaterialRequestId
+ LEFT JOIN avision_getapcs_production.mrstockdetails AS msd ON
+ mri.Id = msd.MaterialRequestItemsId
+ LEFT join avision_getapcs_warehouse.locationtransfers AS lt ON
+ lt.FromPartNumber = mri.PartNumber
+  LEFT JOIN avision_getapcs_master.itemmasters AS im ON
+ im.ItemNumber = mri.PartNumber
+ LEFT JOIN avision_getapcs_master.itemmasteralternates AS ia ON
+ im.ItemMasterId = ia.ItemMasterId
+ where mr.MRNumber=$P{mrNumber}
+ group by
+ mr.MRNumber,
+mr.ProjectNumber,
+mr.CreatedBy,
+mri.PartNumber,
+mri.PartDescription,
+mri.RequiredQty,
+msd.Location,
+ issuedQty,
+im.Department,
+lastDATE,
+im.Uom,
+ia.ManufacturerPartNo,
+mr.LastModifiedBy]]>
+	</queryString>
+	<field name="MRNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MRNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="MRNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialrequests"/>
+	</field>
+	<field name="ProjectNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ProjectNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="ProjectNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialrequests"/>
+	</field>
+	<field name="CreatedBy" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CreatedBy"/>
+		<property name="com.jaspersoft.studio.field.label" value="CreatedBy"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialrequests"/>
+	</field>
+	<field name="LastModifiedBy" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="LastModifiedBy"/>
+		<property name="com.jaspersoft.studio.field.label" value="LastModifiedBy"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialrequests"/>
+	</field>
+	<field name="PartNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PartNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="PartNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialrequestitems"/>
+	</field>
+	<field name="PartDescription" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PartDescription"/>
+		<property name="com.jaspersoft.studio.field.label" value="PartDescription"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialrequestitems"/>
+	</field>
+	<field name="RequiredQty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="RequiredQty"/>
+		<property name="com.jaspersoft.studio.field.label" value="RequiredQty"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialrequestitems"/>
+	</field>
+	<field name="Location" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Location"/>
+		<property name="com.jaspersoft.studio.field.label" value="Location"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="mrstockdetails"/>
+	</field>
+	<field name="Uom" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Uom"/>
+		<property name="com.jaspersoft.studio.field.label" value="Uom"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="itemmasters"/>
+	</field>
+	<field name="ManufacturerPartNo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ManufacturerPartNo"/>
+		<property name="com.jaspersoft.studio.field.label" value="ManufacturerPartNo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="itemmasteralternates"/>
+	</field>
+	<field name="issuedQty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="issuedQty"/>
+		<property name="com.jaspersoft.studio.field.label" value="issuedQty"/>
+	</field>
+	<field name="lastDATE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="lastDATE"/>
+		<property name="com.jaspersoft.studio.field.label" value="lastDATE"/>
+	</field>
+	<field name="Department" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Department"/>
+		<property name="com.jaspersoft.studio.field.label" value="Department"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="itemmasters"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="229" splitType="Stretch">
+			<rectangle>
+				<reportElement x="2" y="2" width="797" height="61" uuid="1f2b39cc-7fe9-44f5-9b49-52d3d4e48093">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</rectangle>
+			<image>
+				<reportElement x="6" y="8" width="204" height="50" uuid="39bf4e0a-5eba-4aaa-94b4-0335d6a46ba7"/>
+				<imageExpression><![CDATA["C:/K-Rep/Screenshot (9).png"]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="590" y="2" width="1" height="71" uuid="4f6199ef-f181-4e56-9c87-b514fed6a957"/>
+			</line>
+			<staticText>
+				<reportElement x="594" y="5" width="40" height="14" uuid="72ab8ad6-900a-43d1-84c0-fe9e620f7723"/>
+				<text><![CDATA[Doc No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="594" y="27" width="40" height="14" uuid="133cd414-f648-4377-be64-ff76fa9f66a1"/>
+				<text><![CDATA[Rev No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="593" y="47" width="68" height="14" uuid="70209385-fb67-4cb5-8b4d-8ab921191924"/>
+				<text><![CDATA[Effective Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="662" y="45" width="10" height="22" uuid="40526f88-252b-4075-a2cf-6169cb82460b"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Black"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="662" y="25" width="10" height="22" uuid="e4cc54d7-c2e8-4b59-aa8c-84d1f503bb5b"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Black"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="662" y="4" width="10" height="22" uuid="0c740d07-094f-4f78-ae5f-497c63fcaf69"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Black"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="270" y="28" width="280" height="25" uuid="725a7feb-8fed-49b0-955b-1737821d9d70"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold" size="16"/>
+				</textElement>
+				<text><![CDATA[MATERIAL ISSUE REQUEST(MIR)]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="2" y="63" width="798" height="109" uuid="ff22af2e-f952-40d1-bd64-e8a05d71862c">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="2" y="70" width="123" height="20" uuid="9e785584-ee33-4532-b16d-d838fbfd91f1"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Name of the Indentor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="150" y="68" width="10" height="22" uuid="2e3fc118-0196-407c-9373-ce1d645f9abc"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Black"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="164" y="70" width="246" height="20" uuid="28a663ca-6d8c-4d80-86a9-c01139d02144"/>
+				<textFieldExpression><![CDATA[$F{CreatedBy}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="94" width="98" height="20" uuid="2e6794dc-f926-436b-889e-cb12f31aca78"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Employee Code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="150" y="93" width="10" height="22" uuid="803b406c-f50e-4558-aaf7-c6b740a756b0"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Black"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="120" width="72" height="22" uuid="f0df64f5-926c-4136-a505-e3e68eb1e443"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Department]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="150" y="118" width="10" height="22" uuid="442193be-5cf1-41c8-86f4-334aeecdd186"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Black"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="164" y="121" width="256" height="18" uuid="4d3c6572-0b7a-43e5-a675-c997b82ae680"/>
+				<textFieldExpression><![CDATA[$F{Department}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="430" y="63" width="1" height="108" uuid="337880df-2577-4900-9fd0-0ad942de9882"/>
+			</line>
+			<staticText>
+				<reportElement x="427" y="71" width="49" height="20" uuid="9b3776eb-9da4-4798-a645-5592bac4f980"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[MIR No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="434" y="97" width="114" height="20" uuid="fe8a0a4f-7efc-43a6-b53a-51c54d69481c"/>
+				<textElement>
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[MIR Issue Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="435" y="120" width="114" height="20" uuid="3c4ca9ba-cef1-4baf-b111-d2765619103f"/>
+				<textElement>
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Project No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="435" y="147" width="100" height="20" uuid="0c4ba6b9-46d1-4726-994f-96e93e50c6e1"/>
+				<textElement>
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Purpose]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="549" y="69" width="10" height="22" uuid="45710956-a549-4d90-bff0-bc66e9aaa174"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Black"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="549" y="95" width="10" height="22" uuid="1748eabf-ff9a-4311-9af3-6dee1a1cdbeb"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Black"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="549" y="119" width="10" height="22" uuid="9fb3f3c4-8927-4eaa-a1e6-b4fb79c59a77"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Black"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="549" y="147" width="10" height="22" uuid="c6d8763f-9b59-42e9-9063-2216f9ae2c23"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Black"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="560" y="121" width="219" height="20" uuid="06f152d3-187d-47b3-8f29-83b1522724e5"/>
+				<textFieldExpression><![CDATA[$F{ProjectNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="560" y="71" width="210" height="20" uuid="5186e39a-5d55-4bd8-b058-0ea635cd0943"/>
+				<textFieldExpression><![CDATA[$F{MRNumber}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="5" y="145" width="119" height="20" uuid="06caffa8-fe38-4388-ac99-70cad46f0475"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Reference PR (if any)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="150" y="144" width="10" height="22" uuid="cd6e0b71-2344-4bf5-a124-8b30858f5035"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Black"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="164" y="146" width="246" height="22" uuid="a70ab652-c8af-4247-b3e8-70642c897086"/>
+				<textFieldExpression><![CDATA[$F{ProjectNumber}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="2" y="172" width="798" height="29" uuid="da518a73-a3be-49c0-93f2-380cb085011e">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="70" y="177" width="172" height="22" uuid="d2f3b850-3e40-41e4-8b3f-37c1d1f4c17b"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Black" size="12"/>
+				</textElement>
+				<text><![CDATA[User Department]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="557" y="176" width="238" height="22" uuid="0675fe55-6dd9-4789-8634-d87d7f8f56c1"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Black" size="12"/>
+				</textElement>
+				<text><![CDATA[Store Department]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="2" y="201" width="798" height="28" uuid="8e53582f-2e4d-43ff-a352-cc334175696b">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="5" y="205" width="43" height="24" uuid="c44e6992-070d-4c0d-b755-1f5be4f74cf8"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[SI.No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="181" y="206" width="105" height="23" uuid="3e49b444-933a-46d5-838d-edb07d3210b2"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Mftr Part No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="323" y="207" width="110" height="20" uuid="0468e52b-98bb-4a77-abd8-43d9ef28c47e"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Item Description]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="205" width="84" height="24" uuid="e7106818-9316-4a87-a76b-3751ecf5f723"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Item Number]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="509" y="207" width="65" height="20" uuid="c2a4ac2d-4515-45ab-80a1-397ca730820c"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Req Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="461" y="206" width="55" height="23" uuid="2bba26c7-728e-4904-9ea9-d63b3988cfa7"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[UOM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="728" y="207" width="65" height="20" uuid="e07819f2-7ef7-4cc3-b84b-9251a9ec4a18"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Issued To]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="567" y="206" width="65" height="23" uuid="d69aa1d4-ee65-4bfc-b5b2-b4acd17be508"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Issued Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="634" y="206" width="85" height="21" uuid="c0ead7e4-2e48-47fa-b8d9-a4abd64de807"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Location (From)]]></text>
+			</staticText>
+			<line>
+				<reportElement x="48" y="201" width="1" height="28" uuid="9c0955dd-a2e9-4920-9fa2-d96479bf8a4c"/>
+			</line>
+			<line>
+				<reportElement x="514" y="201" width="1" height="28" uuid="762441b1-7202-401c-a3bb-0b67135ff689"/>
+			</line>
+			<line>
+				<reportElement x="463" y="201" width="1" height="28" uuid="a357341b-10ff-4d30-b489-d599bf24529e"/>
+			</line>
+			<line>
+				<reportElement x="293" y="201" width="1" height="28" uuid="1b474d98-3cfb-4cee-90b1-b24d3f9b43fa"/>
+			</line>
+			<line>
+				<reportElement x="160" y="201" width="1" height="28" uuid="71348660-e1ba-4f5b-88b1-1e3221edca3f"/>
+			</line>
+			<line>
+				<reportElement x="630" y="201" width="1" height="28" uuid="e408d2ba-1eba-4914-989f-ee6ebefba5bc"/>
+			</line>
+			<line>
+				<reportElement x="569" y="201" width="1" height="28" uuid="77397cdf-a628-4aee-8df3-e2c47ebf5ba1"/>
+			</line>
+			<line>
+				<reportElement x="723" y="201" width="1" height="28" uuid="3a5b61e0-adb9-4cb1-ab0f-691f5024cb67"/>
+			</line>
+			<textField>
+				<reportElement x="560" y="97" width="219" height="20" uuid="74c3ac8c-5c40-47a4-b7fe-ec33afb07255"/>
+				<textFieldExpression><![CDATA[$F{lastDATE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="559" y="148" width="100" height="20" uuid="33536540-9316-4f28-a095-2f7157fac49d"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[--]]></text>
+			</staticText>
+			<line>
+				<reportElement x="569" y="173" width="1" height="30" uuid="4e64939e-18b4-483b-aea1-bceb29c23ac3"/>
+			</line>
+		</band>
+	</title>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<rectangle>
+				<reportElement x="2" y="0" width="798" height="30" uuid="6c814116-b30b-47f3-b030-41c74bc35c3c"/>
+			</rectangle>
+			<textField>
+				<reportElement x="8" y="0" width="34" height="30" uuid="924c91e5-2f56-4f68-be96-43bd5a285637"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="295" y="0" width="166" height="30" uuid="9f45378e-17b6-48e3-8b9d-53a33afe8c59"/>
+				<textFieldExpression><![CDATA[$F{PartDescription}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="49" y="0" width="112" height="30" uuid="ece82076-7280-43e7-9ccf-3111326154cd"/>
+				<textFieldExpression><![CDATA[$F{PartNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="162" y="0" width="132" height="30" uuid="5b1ca460-a205-4174-98bb-a838993e19db"/>
+				<textFieldExpression><![CDATA[$F{ManufacturerPartNo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="463" y="0" width="50" height="30" uuid="a078db06-6f0f-40e2-919e-c310e08ccafc"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{Uom}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="48" y="0" width="1" height="30" uuid="ec43d4db-6f2c-41a4-8932-acdf31b5b618"/>
+			</line>
+			<line>
+				<reportElement x="630" y="0" width="1" height="30" uuid="0c3e8992-89e8-43e5-9637-980fd777bbc3"/>
+			</line>
+			<line>
+				<reportElement x="514" y="0" width="1" height="30" uuid="28cac5be-6380-44b0-9d1b-b06eff23c866"/>
+			</line>
+			<line>
+				<reportElement x="569" y="0" width="1" height="30" uuid="1f1eeb44-0d47-4954-b783-2639e34778e6"/>
+			</line>
+			<line>
+				<reportElement x="463" y="0" width="1" height="30" uuid="9e923501-c14b-44a8-a362-15d8e37996c0"/>
+			</line>
+			<line>
+				<reportElement x="723" y="0" width="1" height="30" uuid="f780f965-563a-4715-bd16-838e1ebd96e7"/>
+			</line>
+			<line>
+				<reportElement x="160" y="0" width="1" height="30" uuid="fd2e7c27-9fc6-4604-b5c8-89a42ef2e619"/>
+			</line>
+			<line>
+				<reportElement x="293" y="0" width="1" height="30" uuid="475fb9ec-1f88-4789-a4e1-bfc00ac3b012"/>
+			</line>
+			<textField>
+				<reportElement x="631" y="0" width="92" height="30" uuid="84a9fb51-e494-4a39-b071-21fc72e21411"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{Location}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="724" y="0" width="72" height="30" uuid="850c70c9-d95f-48cc-a0f3-89d3674ce57c"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{CreatedBy}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="518" y="0" width="50" height="30" uuid="dbf52ec0-c55c-4fe1-bcbb-11f280426e6f"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{RequiredQty}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="571" y="0" width="58" height="30" uuid="c04100b9-5085-46ba-9242-4f94f8402859"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{issuedQty}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="36" splitType="Stretch">
+			<rectangle>
+				<reportElement x="2" y="-1" width="798" height="37" uuid="ce0d7058-7ce2-45df-a9dd-937b06bba962"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="7" y="6" width="100" height="30" uuid="2a905af6-663a-49f2-81d7-1f9672ea6e0b"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Requested  By]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="550" y="8" width="100" height="28" uuid="473cec56-414c-484a-8456-25d6209cddab"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Issued By]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="107" y="6" width="180" height="30" uuid="b01ee97a-48bb-46e1-9847-ddbb962372ef"/>
+				<textFieldExpression><![CDATA[$F{CreatedBy}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="632" y="8" width="170" height="27" uuid="9e506aa8-2a7c-42f9-bc65-2b71496dface"/>
+				<textFieldExpression><![CDATA[$F{LastModifiedBy}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="97" y="4" width="10" height="22" uuid="6c6c66c1-d9d7-4ab3-8049-b708e8c1627b"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Black"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="623" y="6" width="10" height="22" uuid="9b1d4e4f-ccac-47ea-a84f-61f903761ed0"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Black"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>
