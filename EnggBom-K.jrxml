@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="EnggBom-K" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d0a03960-4d34-4ad0-a637-09b4cd04334f">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="AllAdapters\EnggbomK.jrdax"/>
+	<property name="ireport.jasperserver.url" value="http://137.59.201.144:8081/jasperserver/"/>
+	<property name="ireport.jasperserver.user" value="jasperadmin"/>
+	<property name="ireport.jasperserver.report.resource" value="/reports/Keus_GetaPcs/EnggBom_K_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/Keus_GetaPcs/EnggBom_K"/>
+	<parameter name="itemNo" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT 
+    DATE_FORMAT(eb.LastModifiedOn,'%d-%b-%Y' ) AS datev,
+    DATE_FORMAT(eb.CreatedOn,'%d-%b-%Y' ) AS Cdatev,
+    eb.RevisionNumber,
+    eb.ItemNumber, 
+    eb.ItemDescription,
+    eb.ItemType,
+    CASE eb.ItemType
+        WHEN 0 THEN 'PurchasePart'
+        WHEN 1 THEN 'FG'
+        WHEN 2 THEN 'TG'
+        WHEN 3 THEN 'SA'
+        WHEN 4 THEN 'FRU'
+        WHEN 5 THEN 'Phantom'
+        ELSE 'Unknown'
+    END AS ItemTypeDescription,
+    eci.ItemNumber as childitem,
+    eci.Id,
+    eci.Description as descr,
+    eci.PartType,
+    CASE eci.PartType
+        WHEN 0 THEN 'PurchasePart'
+        WHEN 1 THEN 'FG'
+        WHEN 2 THEN 'TG'
+        WHEN 3 THEN 'SA'
+        WHEN 4 THEN 'FRU'
+        WHEN 5 THEN 'Phantom'
+        ELSE 'Unknown'
+    END AS PartTypeDescription,
+    eci.CustomFields,
+    eci.UOM,
+    eci.Quantity,
+    COALESCE(eci.Remarks, '') AS Remarksss,
+    ea.ChildItemNumber,
+    ima.ManufacturerPartNo,
+    JSON_UNQUOTE(JSON_EXTRACT(eci.CustomFields, '$.customObj.Footprint')) AS Footprint,
+    JSON_UNQUOTE(JSON_EXTRACT(eci.CustomFields, '$.customObj.Designator')) AS Designator,
+    JSON_UNQUOTE(JSON_EXTRACT(eci.CustomFields, '$.customObj.Remarks')) AS Rema
+FROM 
+    getapcs_keus_master.enggboms AS eb
+LEFT JOIN 
+    getapcs_keus_master.enggchilditems AS eci ON eb.`BOMId` = eci.`EnggBomId`
+LEFT JOIN 
+    getapcs_keus_master.enggalternates AS ea ON ea.EnggChildItemId = eci.Id
+LEFT JOIN 
+    getapcs_keus_master.itemmasters AS im ON eci.ItemNumber = im.ItemNumber
+LEFT JOIN 
+    getapcs_keus_master.itemmasteralternates ima ON im.ItemMasterId = ima.ItemMasterId
+WHERE 
+    eb.`ItemNumber` =$P{itemNo}
+    AND ima.`IsDefault` = 1    
+    AND eb.RevisionNumber = (
+        SELECT MAX(RevisionNumber) 
+        FROM getapcs_keus_master.enggboms 
+        WHERE ItemNumber =$P{itemNo}
+    )
+GROUP BY
+    eb.ItemNumber, 
+    eb.ItemDescription,
+    eb.ItemType,
+    ItemTypeDescription,
+    childitem,
+        eci.Id,
+    descr,
+    PartTypeDescription,
+    eci.UOM,
+    eci.Quantity,
+    eci.CustomFields,
+    eci.Remarks,
+    PartType,
+    ea.ChildItemNumber,
+    ima.ManufacturerPartNo,
+    datev,
+    eb.RevisionNumber,
+    Cdatev
+ORDER BY 
+      eci.Id]]>
+	</queryString>
+	<field name="datev" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="datev"/>
+		<property name="com.jaspersoft.studio.field.label" value="datev"/>
+	</field>
+	<field name="Cdatev" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Cdatev"/>
+		<property name="com.jaspersoft.studio.field.label" value="Cdatev"/>
+	</field>
+	<field name="RevisionNumber" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="RevisionNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="RevisionNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="enggboms"/>
+	</field>
+	<field name="ItemNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ItemNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="ItemNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="enggboms"/>
+	</field>
+	<field name="ItemDescription" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ItemDescription"/>
+		<property name="com.jaspersoft.studio.field.label" value="ItemDescription"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="enggboms"/>
+	</field>
+	<field name="ItemType" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="ItemType"/>
+		<property name="com.jaspersoft.studio.field.label" value="ItemType"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="enggboms"/>
+	</field>
+	<field name="ItemTypeDescription" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ItemTypeDescription"/>
+		<property name="com.jaspersoft.studio.field.label" value="ItemTypeDescription"/>
+	</field>
+	<field name="childitem" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ItemNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="childitem"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="enggchilditems"/>
+	</field>
+	<field name="Id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="Id"/>
+		<property name="com.jaspersoft.studio.field.label" value="Id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="enggchilditems"/>
+	</field>
+	<field name="descr" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Description"/>
+		<property name="com.jaspersoft.studio.field.label" value="descr"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="enggchilditems"/>
+	</field>
+	<field name="PartType" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="PartType"/>
+		<property name="com.jaspersoft.studio.field.label" value="PartType"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="enggchilditems"/>
+	</field>
+	<field name="PartTypeDescription" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PartTypeDescription"/>
+		<property name="com.jaspersoft.studio.field.label" value="PartTypeDescription"/>
+	</field>
+	<field name="CustomFields" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CustomFields"/>
+		<property name="com.jaspersoft.studio.field.label" value="CustomFields"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="enggchilditems"/>
+	</field>
+	<field name="UOM" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="UOM"/>
+		<property name="com.jaspersoft.studio.field.label" value="UOM"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="enggchilditems"/>
+	</field>
+	<field name="Quantity" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="Quantity"/>
+		<property name="com.jaspersoft.studio.field.label" value="Quantity"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="enggchilditems"/>
+	</field>
+	<field name="Remarksss" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Remarksss"/>
+		<property name="com.jaspersoft.studio.field.label" value="Remarksss"/>
+	</field>
+	<field name="ChildItemNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ChildItemNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="ChildItemNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="enggalternates"/>
+	</field>
+	<field name="ManufacturerPartNo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ManufacturerPartNo"/>
+		<property name="com.jaspersoft.studio.field.label" value="ManufacturerPartNo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="itemmasteralternates"/>
+	</field>
+	<field name="Footprint" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Footprint"/>
+		<property name="com.jaspersoft.studio.field.label" value="Footprint"/>
+	</field>
+	<field name="Designator" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Designator"/>
+		<property name="com.jaspersoft.studio.field.label" value="Designator"/>
+	</field>
+	<field name="Rema" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Rema"/>
+		<property name="com.jaspersoft.studio.field.label" value="Rema"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="140" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="30" width="555" height="50" backcolor="#CCE8FF" uuid="b1e06729-e413-41ce-8ec1-dd252a27c5ba"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="170" y="3" width="220" height="30" uuid="0ec45b7e-3522-494e-bf12-cb49feaff227"/>
+				<textElement>
+					<font fontName="Arial Black" size="16"/>
+				</textElement>
+				<text><![CDATA[            ENGG BOM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="62" y="31" width="270" height="24" uuid="84bf7be1-dbf0-4154-9602-ec6de96d6af2"/>
+				<textElement>
+					<font fontName="Arial Rounded MT Bold" size="8"/>
+				</textElement>
+				<text><![CDATA[KEUS Automation Pvt Ltd Central Square @ 14, 8-2-309/3/A, 4th floor, Road No.14, Banjara Hills, Hyderabad, Telangana, India - 500034]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="64" y="56" width="47" height="16" uuid="88e4d1c7-673f-48a5-90b2-b9a1e1f3b0a5"/>
+				<textElement>
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[GSTIN   :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="113" y="56" width="100" height="13" uuid="8768e545-37dd-4d85-9b62-0cb76c9a8390"/>
+				<text><![CDATA[36AADCH6153P1Z4]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="79" width="555" height="29" backcolor="#DBD5D5" uuid="4fb2a95d-d805-4768-93c7-85786095f186"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="6" y="85" width="80" height="22" uuid="d949a203-5c0d-48e7-8a4b-1343b59e8eff"/>
+				<textElement>
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[ItemNumber]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="177" y="85" width="84" height="16" uuid="38e058f1-ce02-4ab0-ae2c-8c1921970a12"/>
+				<textElement>
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[ItemDescription]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="432" y="85" width="56" height="16" uuid="6a1e3797-287d-4e1c-b975-6e8d9a15e1ad"/>
+				<textElement>
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[ItemType]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="86" y="87" width="84" height="22" uuid="857cd3d6-b479-4424-b3b0-f4c3857bfc77"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ItemNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="268" y="86" width="162" height="22" uuid="652b2479-0399-43cd-839d-bb4c9800b3b1"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ItemDescription}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="498" y="85" width="56" height="22" uuid="cce7b324-5d14-42d9-95e8-05fc26a50a80"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ItemTypeDescription}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="0" y="109" width="555" height="31" backcolor="#A6A2A2" uuid="b7920271-47e1-467a-b399-68e5d6a4536e"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="1" y="114" width="28" height="20" uuid="f24a1fdf-f59d-4de3-a2fb-cf61a7a7935d"/>
+				<textElement>
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<text><![CDATA[SI.NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="113" width="58" height="22" uuid="39076b58-ae98-456f-a337-eacba4d8e222"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<text><![CDATA[ItemNumber]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="168" y="113" width="84" height="24" uuid="2d37d736-c1f6-4fc6-a5bc-73f2febd0511"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<text><![CDATA[ItemDescription]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="309" y="113" width="42" height="24" uuid="9ad95709-b2a9-406d-920e-7917b87f6f06"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Item            Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="493" y="113" width="30" height="24" uuid="37e9bf55-7579-46e6-a3e4-56148872d080"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Qty      /Set]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="523" y="114" width="33" height="24" uuid="0db27de1-5308-4d0d-9f08-54782d7c6269"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[UOM]]></text>
+			</staticText>
+			<line>
+				<reportElement x="26" y="109" width="1" height="31" uuid="2ed82cb8-eda5-4ab9-97a4-b0013e4061d1"/>
+			</line>
+			<line>
+				<reportElement x="524" y="109" width="1" height="31" uuid="1e9d7415-d400-40c6-8638-bf3a31e0f12f"/>
+			</line>
+			<line>
+				<reportElement x="353" y="109" width="1" height="31" uuid="e873f2b3-56f9-46b0-b40c-98b95846e0fc"/>
+			</line>
+			<line>
+				<reportElement x="310" y="108" width="1" height="31" uuid="1203aa4b-9dc0-472a-a5cc-dc383a2d9036"/>
+			</line>
+			<line>
+				<reportElement x="82" y="109" width="1" height="31" uuid="db68821f-8fcb-4b4e-94ff-892d1851754e"/>
+			</line>
+			<staticText>
+				<reportElement x="69" y="85" width="20" height="22" uuid="cc43d789-6292-447f-860a-b655447b1490"/>
+				<text><![CDATA[   :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="251" y="84" width="20" height="22" uuid="5ceaa2b8-6361-4864-888c-1c3fea9f8a63"/>
+				<text><![CDATA[   :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="479" y="84" width="20" height="22" uuid="ef9f2279-bd2d-4410-9b67-4711849ef866"/>
+				<text><![CDATA[   :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="351" y="114" width="55" height="24" uuid="e0a8dd17-8146-4110-a66b-e3d5b33b950e"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<text><![CDATA[Designator]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="412" y="114" width="26" height="24" uuid="573e5ba4-a21b-4a30-b4bf-2d0d4d70894f"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Foot         Print]]></text>
+			</staticText>
+			<line>
+				<reportElement x="403" y="110" width="1" height="29" uuid="17b75f70-0b7d-40c3-a5d8-a3c1aa80f0fc"/>
+			</line>
+			<line>
+				<reportElement x="447" y="109" width="1" height="31" uuid="e3701608-be22-4688-94d1-59d07bb1da16"/>
+			</line>
+			<staticText>
+				<reportElement x="448" y="115" width="44" height="24" uuid="e737a922-1b34-4df1-a40c-e67f492c44c6"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Remarks]]></text>
+			</staticText>
+			<line>
+				<reportElement x="493" y="110" width="1" height="29" uuid="56cbbd3e-02f0-4970-95da-e2294abbcdb1"/>
+			</line>
+			<line>
+				<reportElement x="154" y="110" width="1" height="29" uuid="9bf56c00-fd5d-49e0-89f8-77e351a13f74"/>
+			</line>
+			<staticText>
+				<reportElement x="95" y="113" width="42" height="21" uuid="c9d53830-6199-4487-8c49-4c9542f65d89"/>
+				<textElement>
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<text><![CDATA[MPN No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="40" width="58" height="18" uuid="f7e6df12-5e79-4a77-be20-02a67aceb756"/>
+				<text><![CDATA[Date     :]]></text>
+			</staticText>
+			<image>
+				<reportElement x="4" y="33" width="50" height="27" uuid="0b472f89-9191-4c9f-8f1d-c80863e36468"/>
+				<imageExpression><![CDATA["C:/K-Rep/KeusReports/Keus Logo.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="350" y="56" width="89" height="18" uuid="efd280bb-7892-4d89-bfdf-94089006d26e"/>
+				<text><![CDATA[BOM Version  :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="393" y="40" width="100" height="16" uuid="b73923d8-b64a-4645-bc01-f6b8f0499a45"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{Cdatev}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="428" y="57" width="100" height="16" uuid="9183e5a5-04ae-4b76-81f5-b9c6a823bee0"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{RevisionNumber}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="41" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="40" backcolor="#DBD5D5" uuid="7a674632-273c-43cb-8b80-99462145a374"/>
+			</rectangle>
+			<line>
+				<reportElement x="353" y="1" width="1" height="39" uuid="299e2d6c-2e91-44bb-b3bc-66bed5d8f869"/>
+			</line>
+			<line>
+				<reportElement x="310" y="0" width="1" height="39" uuid="274ad838-5590-425b-8483-fb4863cdb04e"/>
+			</line>
+			<line>
+				<reportElement x="82" y="0" width="1" height="39" uuid="475d20de-c780-491e-9331-74d6f3b0e5d9"/>
+			</line>
+			<line>
+				<reportElement x="26" y="1" width="1" height="39" uuid="10678baf-916d-48ae-909d-bbd8437f225f"/>
+			</line>
+			<line>
+				<reportElement x="524" y="0" width="1" height="39" uuid="1ea4c515-2fa4-46ff-a9cb-f29b8b27dfe7"/>
+			</line>
+			<textField>
+				<reportElement x="0" y="5" width="26" height="30" uuid="bc7929c9-284a-4cc6-bd47-6ef55c9fbd3f"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="28" y="5" width="57" height="30" uuid="ae3e10ce-5bed-44e1-9cc2-27438a2784b1"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{childitem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="157" y="2" width="152" height="37" uuid="8dcf685b-ae9f-41f8-bf2e-246f298447dd"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descr}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="311" y="6" width="41" height="30" uuid="50af020c-8ad7-4426-b58b-635e33644ec0"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PartTypeDescription}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="495" y="4" width="27" height="34" uuid="f87ae677-b991-49be-8c81-f1c5e8eb5f35"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Quantity}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="523" y="5" width="31" height="30" uuid="39997ad5-3bc4-4d3c-be04-d66e2e9debd9"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{UOM}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="447" y="1" width="1" height="39" uuid="706ca081-2fdb-4f6f-a145-9f43448963c1"/>
+			</line>
+			<line>
+				<reportElement x="403" y="1" width="1" height="39" uuid="83bb3096-b034-4adc-8ea9-a2291f1a90a6"/>
+			</line>
+			<line>
+				<reportElement x="493" y="1" width="1" height="39" uuid="8112f084-3f95-4c83-bca6-8953bbd18575"/>
+			</line>
+			<textField>
+				<reportElement x="353" y="5" width="49" height="30" uuid="ab9557ba-7413-4f47-ac61-2de9cd6bf2cd"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Designator}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="449" y="5" width="44" height="30" uuid="01bd210b-6300-4c6d-9dbf-6ac9cf7d2545"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Remarksss}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="401" y="5" width="46" height="30" uuid="31ac6b80-529b-4418-ba89-d66e5b097b57"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Footprint}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="154" y="0" width="1" height="39" uuid="b393329d-2038-454a-ab85-ae993b127bdf"/>
+			</line>
+			<textField>
+				<reportElement x="83" y="6" width="71" height="25" uuid="07f357d7-a5c3-475f-8136-30aeeff959c0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ManufacturerPartNo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="50" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<rectangle>
+				<reportElement x="0" y="-1" width="555" height="50" backcolor="#FA8B89" uuid="3c53adeb-d047-4a4f-9198-7357b7992937"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="11" y="16" width="58" height="18" uuid="8308ff1a-0f3b-4e52-b00e-fa0a05c66ede"/>
+				<textElement>
+					<font fontName="Arial Black"/>
+				</textElement>
+				<text><![CDATA[Remarks]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="71" y="16" width="407" height="20" uuid="d4149b55-6d70-4d48-b830-a34aae50fa59"/>
+				<textFieldExpression><![CDATA[$F{Remarksss}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

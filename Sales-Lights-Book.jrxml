@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SalesKLBR" pageWidth="595" pageHeight="842" sectionType="Part" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="30" bottomMargin="30" uuid="d2716064-8ae4-40cf-a575-33afba400e3a">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="AllAdapters\Sales-K.jrdax"/>
+	<property name="net.sf.jasperreports.print.create.bookmarks" value="true"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="ireport.jasperserver.url" value="http://137.59.201.144:8081/jasperserver/"/>
+	<property name="ireport.jasperserver.user" value="jasperadmin"/>
+	<property name="ireport.jasperserver.report.resource" value="/reports/Keus_GetaPcs/Sales_Lights_Book_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/Keus_GetaPcs/Sales_Lights_Book"/>
+	<parameter name="salesOrderNumber" class="java.lang.String"/>
+	<parameter name="revNumber" class="java.lang.Float"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT MAX( s2.Id) AS MaxId,
+	s2.`SalesOrderNumber`,
+	s2.`CustomerName`,
+	s2.`CustomerId`,
+	s2.`Unit`,
+	s2.`QuoteNumber`
+FROM getapcs_keus_sales.salesorders s2
+	JOIN getapcs_keus_sales.salesordersitems si ON 
+	 si.`SalesOrderId` = s2.`Id` 
+WHERE 
+	 s2.`SalesOrderNumber` = $P{salesOrderNumber} 
+	 AND s2.`RevisionNumber` = $P{revNumber} 
+GROUP BY s2.`SalesOrderNumber`,
+	s2.`CustomerName`,
+	s2.`CustomerId`,
+	s2.`Unit`,
+	s2.`QuoteNumber`]]>
+	</queryString>
+	<field name="MaxId" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="MaxId"/>
+		<property name="com.jaspersoft.studio.field.label" value="MaxId"/>
+	</field>
+	<field name="SalesOrderNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="SalesOrderNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="SalesOrderNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="CustomerName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CustomerName"/>
+		<property name="com.jaspersoft.studio.field.label" value="CustomerName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="CustomerId" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CustomerId"/>
+		<property name="com.jaspersoft.studio.field.label" value="CustomerId"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="Unit" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Unit"/>
+		<property name="com.jaspersoft.studio.field.label" value="Unit"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="QuoteNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="QuoteNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="QuoteNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<detail>
+		<part uuid="2ccdf419-6727-496f-b067-93d92c773406">
+			<p:subreportPart xmlns:p="http://jasperreports.sourceforge.net/jasperreports/parts" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/parts http://jasperreports.sourceforge.net/xsd/parts.xsd">
+				<subreportParameter name="REPORT_CONNECTION">
+					<subreportParameterExpression><![CDATA[$P{REPORT_CONNECTION}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="salesOrderNumber">
+					<subreportParameterExpression><![CDATA[$P{salesOrderNumber}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="revNumber">
+					<subreportParameterExpression><![CDATA[$P{revNumber}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA["rrr.jasper"]]></subreportExpression>
+			</p:subreportPart>
+		</part>
+		<part uuid="4dd227d6-50b5-406c-9098-3713f9646f55">
+			<p:subreportPart xmlns:p="http://jasperreports.sourceforge.net/jasperreports/parts" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/parts http://jasperreports.sourceforge.net/xsd/parts.xsd">
+				<subreportParameter name="REPORT_CONNECTION">
+					<subreportParameterExpression><![CDATA[$P{REPORT_CONNECTION}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="salesOrderNumber">
+					<subreportParameterExpression><![CDATA[$P{salesOrderNumber}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="revNumber">
+					<subreportParameterExpression><![CDATA[$P{revNumber}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA["rrr_7.jasper"]]></subreportExpression>
+			</p:subreportPart>
+		</part>
+		<part uuid="fa41100c-64b4-43f9-a3cb-c88817edb8df">
+			<p:subreportPart xmlns:p="http://jasperreports.sourceforge.net/jasperreports/parts" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/parts http://jasperreports.sourceforge.net/xsd/parts.xsd">
+				<subreportParameter name="REPORT_CONNECTION">
+					<subreportParameterExpression><![CDATA[$P{REPORT_CONNECTION}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="salesOrderNumber">
+					<subreportParameterExpression><![CDATA[$P{salesOrderNumber}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="revNumber">
+					<subreportParameterExpression><![CDATA[$P{revNumber}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA["lightsData23.jasper"]]></subreportExpression>
+			</p:subreportPart>
+		</part>
+		<part uuid="63b4873f-38f3-4b50-877c-208d8ae42846">
+			<p:subreportPart xmlns:p="http://jasperreports.sourceforge.net/jasperreports/parts" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/parts http://jasperreports.sourceforge.net/xsd/parts.xsd">
+				<subreportParameter name="REPORT_CONNECTION">
+					<subreportParameterExpression><![CDATA[$P{REPORT_CONNECTION}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="salesOrderNumber">
+					<subreportParameterExpression><![CDATA[$P{salesOrderNumber}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="revNumber">
+					<subreportParameterExpression><![CDATA[$P{revNumber}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA["SalesLightsSummary23.jasper"]]></subreportExpression>
+			</p:subreportPart>
+		</part>
+		<part uuid="f720dfe1-24bf-4b20-beaa-318dc9562fea">
+			<p:subreportPart xmlns:p="http://jasperreports.sourceforge.net/jasperreports/parts" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/parts http://jasperreports.sourceforge.net/xsd/parts.xsd">
+				<subreportParameter name="REPORT_CONNECTION">
+					<subreportParameterExpression><![CDATA[$P{REPORT_CONNECTION}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="salesOrderNumber">
+					<subreportParameterExpression><![CDATA[$P{salesOrderNumber}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="revNumber">
+					<subreportParameterExpression><![CDATA[$P{revNumber}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA["convertedToJPG.jasper"]]></subreportExpression>
+			</p:subreportPart>
+		</part>
+		<part uuid="a473acce-12f7-4dbd-b4cb-53396367c635">
+			<p:subreportPart xmlns:p="http://jasperreports.sourceforge.net/jasperreports/parts" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/parts http://jasperreports.sourceforge.net/xsd/parts.xsd">
+				<subreportParameter name="REPORT_CONNECTION">
+					<subreportParameterExpression><![CDATA[$P{REPORT_CONNECTION}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="salesOrderNumber">
+					<subreportParameterExpression><![CDATA[$P{salesOrderNumber}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="revNumber">
+					<subreportParameterExpression><![CDATA[$P{revNumber}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA["rr_image7.jasper"]]></subreportExpression>
+			</p:subreportPart>
+		</part>
+		<part uuid="9f7dab8d-193e-4bb7-a38b-1ef77e072ae7">
+			<p:subreportPart xmlns:p="http://jasperreports.sourceforge.net/jasperreports/parts" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/parts http://jasperreports.sourceforge.net/xsd/parts.xsd">
+				<subreportParameter name="REPORT_CONNECTION">
+					<subreportParameterExpression><![CDATA[$P{REPORT_CONNECTION}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="salesOrderNumber">
+					<subreportParameterExpression><![CDATA[$P{salesOrderNumber}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="revNumber">
+					<subreportParameterExpression><![CDATA[$P{revNumber}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA["rr_image8.jasper"]]></subreportExpression>
+			</p:subreportPart>
+		</part>
+	</detail>
+</jasperReport>

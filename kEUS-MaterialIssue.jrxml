@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="material" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="ef4bda03-3270-4af8-b59d-ecda12b3b809">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SHopOrder-K"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="ireport.jasperserver.url" value="http://137.59.201.144:8081/jasperserver/"/>
+	<property name="ireport.jasperserver.user" value="jasperadmin"/>
+	<property name="ireport.jasperserver.report.resource" value="/reports/Keus_GetaPcs/K_MaterialIssue_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/Keus_GetaPcs/K_MaterialIssue"/>
+	<subDataset name="Dataset1" uuid="9e2b39af-6e6b-493d-bfc3-6579e16dd07a">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="materialissue_conn"/>
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+	</subDataset>
+	<parameter name="shopOrderNumber" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT 
+    DATE_FORMAT(m.ShopOrderDate,'%d-%b-%Y' ) AS ShopordDate,
+    DATE_FORMAT(m.CreatedOn,'%d-%b-%Y' ) AS createdon,
+     so.BomRevisionNo,
+    m.ShopOrderNumber,
+    m.CreatedBy,
+    m.ItemNumber,
+    mi.ProjectNumber,
+    mi.PartNumber,
+    mi.Id,
+    mi.Description AS descrip,
+    mi.PartType,
+    mi.Uom,
+    mi.RequiredQty,
+    mi.IssuedQty,
+    ima.ManufacturerPartNo,
+    (mi.RequiredQty - mi.IssuedQty) AS BalQty,
+    CASE mi.PartType
+        WHEN 0 THEN 'PurchasePart'
+        WHEN 1 THEN 'FG'
+        WHEN 2 THEN 'TG'
+        WHEN 3 THEN 'SA'
+        WHEN 4 THEN 'FRU'
+        WHEN 5 THEN 'Phantom'
+        ELSE 'Unknown'
+    END AS PartTypeDescription,
+    SUM(COALESCE(mi.IssuedQty, 0)) OVER () AS TOTALQty
+FROM 
+    getapcs_keus_production.materialissue AS m
+INNER JOIN 
+    getapcs_keus_production.materialissueitems AS mi ON m.`Id` = mi.`MaterialIssueId` 
+    LEFT JOIN 
+getapcs_keus_production.shoporders AS so ON so.ShopOrderNumber = m.ShopOrderNumber
+LEFT JOIN 
+    getapcs_keus_master.itemmasters AS im ON im.ItemNumber = mi.PartNumber
+    
+LEFT JOIN 
+    getapcs_keus_master.itemmasteralternates AS ima ON ima.ItemMasterId = im.ItemMasterId
+WHERE
+    m.`ShopOrderNumber` =$P{shopOrderNumber}
+    AND ima.IsDefault = 1
+GROUP BY 
+    ShopordDate, 
+    m.ShopOrderNumber, 
+    m.CreatedBy, 
+    m.ItemNumber, 
+    mi.ProjectNumber, 
+    mi.PartNumber, 
+     so.BomRevisionNo,
+    mi.Description, 
+    mi.PartType,
+    mi.Id,
+    mi.Uom, 
+    mi.RequiredQty, 
+    mi.IssuedQty, 
+    ima.ManufacturerPartNo, 
+    BalQty, 
+    PartTypeDescription,
+    createdon
+    
+    order by
+       mi.Id]]>
+	</queryString>
+	<field name="ShopordDate" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ShopordDate"/>
+		<property name="com.jaspersoft.studio.field.label" value="ShopordDate"/>
+	</field>
+	<field name="createdon" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="createdon"/>
+		<property name="com.jaspersoft.studio.field.label" value="createdon"/>
+	</field>
+	<field name="BomRevisionNo" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="BomRevisionNo"/>
+		<property name="com.jaspersoft.studio.field.label" value="BomRevisionNo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="shoporders"/>
+	</field>
+	<field name="ShopOrderNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ShopOrderNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="ShopOrderNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialissue"/>
+	</field>
+	<field name="CreatedBy" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CreatedBy"/>
+		<property name="com.jaspersoft.studio.field.label" value="CreatedBy"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialissue"/>
+	</field>
+	<field name="ItemNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ItemNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="ItemNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialissue"/>
+	</field>
+	<field name="ProjectNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ProjectNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="ProjectNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialissueitems"/>
+	</field>
+	<field name="PartNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PartNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="PartNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialissueitems"/>
+	</field>
+	<field name="Id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="Id"/>
+		<property name="com.jaspersoft.studio.field.label" value="Id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialissueitems"/>
+	</field>
+	<field name="descrip" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Description"/>
+		<property name="com.jaspersoft.studio.field.label" value="descrip"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialissueitems"/>
+	</field>
+	<field name="PartType" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="PartType"/>
+		<property name="com.jaspersoft.studio.field.label" value="PartType"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialissueitems"/>
+	</field>
+	<field name="Uom" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="UOM"/>
+		<property name="com.jaspersoft.studio.field.label" value="Uom"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialissueitems"/>
+	</field>
+	<field name="RequiredQty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="RequiredQty"/>
+		<property name="com.jaspersoft.studio.field.label" value="RequiredQty"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialissueitems"/>
+	</field>
+	<field name="IssuedQty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="IssuedQty"/>
+		<property name="com.jaspersoft.studio.field.label" value="IssuedQty"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialissueitems"/>
+	</field>
+	<field name="ManufacturerPartNo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ManufacturerPartNo"/>
+		<property name="com.jaspersoft.studio.field.label" value="ManufacturerPartNo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="itemmasteralternates"/>
+	</field>
+	<field name="BalQty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="BalQty"/>
+		<property name="com.jaspersoft.studio.field.label" value="BalQty"/>
+	</field>
+	<field name="PartTypeDescription" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PartTypeDescription"/>
+		<property name="com.jaspersoft.studio.field.label" value="PartTypeDescription"/>
+	</field>
+	<field name="TOTALQty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TOTALQty"/>
+		<property name="com.jaspersoft.studio.field.label" value="TOTALQty"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="163" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<rectangle>
+				<reportElement x="0" y="7" width="553" height="44" backcolor="#BA7675" uuid="cfcc5418-5be8-4117-acba-b77a9ebca458">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="235" y="14" width="149" height="29" forecolor="#FCFCFC" uuid="91d27439-c82c-4abc-9e9b-c301b8e80849"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[  MATERIAL ISSUE]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="51" width="553" height="106" backcolor="#B8B4B4" uuid="209bd613-b9ef-4447-b42f-4fa55598df9c">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="1" y="50" width="86" height="24" uuid="a5d6ee7c-e352-43a6-9bfb-2dd33c5b357d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ShopOrderNO : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="79" width="101" height="24" uuid="9ac34358-b1a9-41f8-a345-8efc7e887722">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MaterialIssue NO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="199" y="50" width="98" height="24" uuid="3fad7a9b-eb67-45a8-83c0-892dbebffac8">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Project Number :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="202" y="79" width="90" height="24" uuid="e8d0bd42-b183-43c5-94b7-71c503244753">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Part Number    :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="378" y="51" width="98" height="24" uuid="bde9beb0-eaaf-4922-ad14-272b671d9170">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ShopOrder Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="79" width="93" height="24" uuid="37496075-4a3a-4f49-90ad-4fbb93bc04b9">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Issued By         :]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="122" width="551" height="1" uuid="676a066e-455b-49db-8587-2f84e2964252"/>
+			</line>
+			<staticText>
+				<reportElement x="1" y="122" width="28" height="39" uuid="a5b85888-2359-4d70-ab8c-860d889ecad1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SL NO.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="31" y="131" width="70" height="29" uuid="f5751e7e-1338-4d7d-b88e-d3341578f490"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[KPN Number]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="191" y="122" width="131" height="39" uuid="ce5bafb7-dfbc-4cca-a256-19c95929a789"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Description]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="347" y="126" width="46" height="31" uuid="551474b2-faf1-4d43-a3de-f06e6d955fc0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Part        Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="396" y="124" width="26" height="32" uuid="28590557-2941-4323-a510-3f935e3c6a31"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[UOM]]></text>
+			</staticText>
+			<line>
+				<reportElement x="29" y="123" width="1" height="34" uuid="09e5ec31-6a56-4e76-bde3-916cd02e9737"/>
+			</line>
+			<line>
+				<reportElement x="188" y="123" width="1" height="34" uuid="f515ac0f-8558-4b05-8cce-5dda8ebaa427"/>
+			</line>
+			<line>
+				<reportElement x="342" y="122" width="1" height="36" uuid="9152dded-8cac-47ce-a753-bd8c44c5e11c"/>
+			</line>
+			<line>
+				<reportElement x="394" y="122" width="1" height="36" uuid="040a9b32-c0c1-4138-8429-977428aa0d01"/>
+			</line>
+			<line>
+				<reportElement x="422" y="123" width="1" height="34" uuid="40440db7-485f-41fc-b635-ce5cd0aba82d"/>
+			</line>
+			<line>
+				<reportElement x="510" y="122" width="1" height="36" uuid="f06e69dc-facf-478d-88f5-099b262b77b4"/>
+			</line>
+			<textField>
+				<reportElement x="97" y="85" width="102" height="21" uuid="24ec0d25-1c66-4711-8e40-5e0a2e25ce9b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ShopOrderNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="473" y="57" width="72" height="21" uuid="d31a5233-abc1-418d-a4e0-a915d7a60acc"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ShopordDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="82" y="57" width="128" height="17" uuid="f5e49a7f-27d1-4732-8132-7b7e9d67cb78"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ShopOrderNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="292" y="56" width="81" height="21" uuid="908b4f63-10ef-4b2b-8484-d40edc43f2ad"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ProjectNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="294" y="86" width="81" height="21" uuid="8d693451-fd16-4839-8936-9a5c8af1d044"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ItemNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="473" y="87" width="75" height="21" uuid="fdca6016-3e71-4d59-8459-96f857a9f3fb"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CreatedBy}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="82" y="9" width="150" height="40" forecolor="#F5F2F2" uuid="fa6c4e4d-af36-497e-a47f-1bf5eeb237b5"/>
+				<textElement>
+					<font fontName="Arial Rounded MT Bold" size="8"/>
+				</textElement>
+				<text><![CDATA[KEUS Automation Pvt Ltd Central Square @ 14, 8-2-309/3/A, 4th floor, Road No.14, Banjara Hills, Hyderabad, Telangana, India - 500034]]></text>
+			</staticText>
+			<line>
+				<reportElement x="465" y="123" width="1" height="35" uuid="0a859c76-3605-4fae-b504-01e2928fde39"/>
+			</line>
+			<staticText>
+				<reportElement x="511" y="123" width="43" height="34" uuid="48a533d2-1e24-4b1b-be9d-3aa0efe8f49f"/>
+				<textElement>
+					<font fontName="Arial Rounded MT Bold" size="10"/>
+				</textElement>
+				<text><![CDATA[BalanceQty]]></text>
+			</staticText>
+			<line>
+				<reportElement x="111" y="123" width="1" height="35" uuid="dcff97d1-aba2-4171-89f1-9e350710fa93"/>
+			</line>
+			<staticText>
+				<reportElement x="114" y="134" width="72" height="22" uuid="63ecb7b4-8ac0-49a4-8db0-3d3bce5de9be">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[MPN Number]]></text>
+			</staticText>
+			<image>
+				<reportElement x="4" y="10" width="73" height="29" uuid="673274c7-60b3-4d36-9c6c-8673c9de10b2"/>
+				<imageExpression><![CDATA["/K-Rep/Keus Logo.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="403" y="20" width="57" height="19" uuid="01ef9c2e-c978-43c0-932d-a862fdce8a23"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="458" y="20" width="83" height="18" uuid="3086f8a5-03a3-4fe0-8406-f6e97b58842a"/>
+				<textFieldExpression><![CDATA[$F{createdon}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="464" y="123" width="48" height="30" uuid="9fe6792b-2d3c-4df5-aa19-35f679b2e169"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Issued 
+Qty
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="124" width="48" height="30" uuid="775e0ba4-2962-419f-97a1-6b82de327925"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Required
+Qty
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="382" y="97" width="93" height="24" uuid="afe29a6d-0d51-405b-9388-8891ca3dd6b4">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[BOM No           :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="473" y="105" width="75" height="21" uuid="25560ccc-dc8c-4a44-b823-25e28d271cb2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{BomRevisionNo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="28" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="-6" width="553" height="34" backcolor="#E3E1E1" uuid="51df23fb-2787-404c-ba5b-5438cacda35c"/>
+			</rectangle>
+			<textField>
+				<reportElement x="1" y="-3" width="28" height="25" uuid="8dfa8f6f-4cbe-4728-bf3f-793786ce80eb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="29" y="-7" width="1" height="35" uuid="757f91c3-00b9-4beb-8dd3-7efd6453be80"/>
+			</line>
+			<line>
+				<reportElement x="188" y="-6" width="1" height="34" uuid="95144efb-3134-4e43-a103-915fb6de694b"/>
+			</line>
+			<line>
+				<reportElement x="342" y="-7" width="1" height="35" uuid="4991ff9b-5184-4191-9f41-cd5edbaf9790"/>
+			</line>
+			<line>
+				<reportElement x="394" y="-6" width="1" height="34" uuid="f0ad74e2-8525-4813-b217-88f988c25515"/>
+			</line>
+			<line>
+				<reportElement x="422" y="-7" width="1" height="35" uuid="096e9819-c0ae-47b6-8742-54d8c6800628"/>
+			</line>
+			<line>
+				<reportElement x="510" y="-8" width="1" height="36" uuid="d0aceb93-3190-4328-9a88-41319d869d52"/>
+			</line>
+			<textField>
+				<reportElement x="396" y="1" width="25" height="21" uuid="d75928f5-96ae-4140-9764-a033a1dfb062"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Uom}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="468" y="-1" width="41" height="21" uuid="0f7104ac-dd35-42fa-a53a-05784f14c6be"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{IssuedQty}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="421" y="-1" width="43" height="21" uuid="2d76ca1e-ce47-44e9-bff7-a91fc1b2ffd2"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RequiredQty}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="31" y="-2" width="80" height="25" uuid="d3599bc6-06b3-4c29-99f3-719bca436269"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PartNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="343" y="-2" width="51" height="26" uuid="1dd5307a-3a87-4c30-bb1e-19ea2dcda863"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PartTypeDescription}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="191" y="-5" width="151" height="32" uuid="24a2a24d-173f-44fb-8bd8-61d4d19b5818"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descrip}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="465" y="-6" width="1" height="34" uuid="f9f0ee1c-f412-4bc0-9f0f-ac6a298892f3"/>
+			</line>
+			<textField>
+				<reportElement x="513" y="1" width="38" height="20" uuid="794aa69e-b893-42ba-9f9f-5de634bf3130"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{BalQty}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="111" y="-6" width="1" height="34" uuid="de43fe3b-853d-4cd0-abaa-1834986f4e07"/>
+			</line>
+			<textField>
+				<reportElement x="113" y="-3" width="70" height="26" uuid="7881c953-a670-4c66-aed1-2c234ab8c767"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ManufacturerPartNo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="110" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="25" width="553" height="22" backcolor="#A6A6A6" uuid="4c152c83-cea7-488f-8aab-d15120b0ce30"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="47" width="553" height="60" backcolor="#BA7675" uuid="448d66d4-f9d9-454c-92eb-17e3328db9da"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="15" y="58" width="117" height="24" uuid="fdd9555b-7d90-489c-b613-c20bd7779e01">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Issued By ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="15" y="86" width="135" height="24" uuid="58f24da0-ded8-4a5f-8df0-44aec3941c9f">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Signature]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="319" y="58" width="117" height="24" uuid="99f1b657-2043-4de9-9e7b-109d1b5e0a22">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Received By]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="319" y="86" width="117" height="24" uuid="4c5780ad-4403-4fa4-9c69-38ad03df8426">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Signature]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="0" width="553" height="25" uuid="c95590bc-7d4d-4d34-9c69-3db8448464f6"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="348" y="5" width="100" height="22" uuid="9d814af4-2acd-48f1-8b1d-22fe4feeb4f5"/>
+				<textElement>
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[TOTAL QUANTITY]]></text>
+			</staticText>
+			<line>
+				<reportElement x="465" y="-1" width="1" height="25" uuid="9d60a3ab-18dc-4a65-90e4-35438bb5e649"/>
+			</line>
+			<textField>
+				<reportElement x="472" y="2" width="78" height="24" uuid="4e49a727-a1c1-495e-bc18-f0b7b74c06cb"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTALQty}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
