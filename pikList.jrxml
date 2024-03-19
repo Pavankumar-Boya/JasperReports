@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="mytras-pl" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="140035bd-591e-4f1a-9b5b-b19b48d46daf">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="AllAdapters\piklist.jrdax"/>
+	<property name="ireport.jasperserver.url" value="https://reports.getapcs.com/jasperserver/"/>
+	<property name="ireport.jasperserver.user" value="nayagam"/>
+	<property name="ireport.jasperserver.report.resource" value="/reports/Trasccon_Getapcs/Demo_Pick_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/Trasccon_Getapcs/Demo_Pick"/>
+	<parameter name="shopOrderNumber" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT DISTINCT
+    DATE_FORMAT(m.ShopOrderDate, '%d-%b-%Y') AS Shoporderdate,
+    DATE_FORMAT(m.LastModifiedOn, '%d-%b-%Y') AS LastModifiedDate,
+    m.ShopOrderNumber,
+    m.ItemNumber,
+    m.ShopOrderQty,
+    m.Unit,
+    mi.Id,
+    mi.PartNumber,
+    mi.Description AS childdesc,
+    mi.ProjectNumber,
+    mi.UOM,
+    mi.RequiredQty,
+    mi.IssuedQty,
+    (mi.RequiredQty - mi.IssuedQty) AS BalanceToIssue
+FROM
+    tras_getapcs_production.materialissue AS m
+LEFT JOIN
+    tras_getapcs_production.materialissueitems AS mi ON m.Id = mi.MaterialIssueId
+WHERE
+    m.ShopOrderNumber =$P{shopOrderNumber}
+group by
+ Shoporderdate,
+    LastModifiedDate,
+    m.ShopOrderNumber,
+    m.ItemNumber,
+    m.ShopOrderQty,
+    m.Unit,
+    mi.PartNumber,
+     childdesc,
+    mi.ProjectNumber,
+    mi.UOM,
+    mi.RequiredQty,
+    mi.IssuedQty,
+   BalanceToIssue,
+       mi.Id
+       
+       order by 
+           mi.Id]]>
+	</queryString>
+	<field name="Shoporderdate" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Shoporderdate"/>
+		<property name="com.jaspersoft.studio.field.label" value="Shoporderdate"/>
+	</field>
+	<field name="LastModifiedDate" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="LastModifiedDate"/>
+		<property name="com.jaspersoft.studio.field.label" value="LastModifiedDate"/>
+	</field>
+	<field name="ShopOrderNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ShopOrderNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="ShopOrderNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialissue"/>
+	</field>
+	<field name="ItemNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ItemNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="ItemNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialissue"/>
+	</field>
+	<field name="ShopOrderQty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="ShopOrderQty"/>
+		<property name="com.jaspersoft.studio.field.label" value="ShopOrderQty"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialissue"/>
+	</field>
+	<field name="Unit" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Unit"/>
+		<property name="com.jaspersoft.studio.field.label" value="Unit"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialissue"/>
+	</field>
+	<field name="Id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="Id"/>
+		<property name="com.jaspersoft.studio.field.label" value="Id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialissueitems"/>
+	</field>
+	<field name="PartNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PartNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="PartNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialissueitems"/>
+	</field>
+	<field name="childdesc" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Description"/>
+		<property name="com.jaspersoft.studio.field.label" value="childdesc"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialissueitems"/>
+	</field>
+	<field name="ProjectNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ProjectNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="ProjectNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialissueitems"/>
+	</field>
+	<field name="UOM" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="UOM"/>
+		<property name="com.jaspersoft.studio.field.label" value="UOM"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialissueitems"/>
+	</field>
+	<field name="RequiredQty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="RequiredQty"/>
+		<property name="com.jaspersoft.studio.field.label" value="RequiredQty"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialissueitems"/>
+	</field>
+	<field name="IssuedQty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="IssuedQty"/>
+		<property name="com.jaspersoft.studio.field.label" value="IssuedQty"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="materialissueitems"/>
+	</field>
+	<field name="BalanceToIssue" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="BalanceToIssue"/>
+		<property name="com.jaspersoft.studio.field.label" value="BalanceToIssue"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="138" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<rectangle>
+				<reportElement x="0" y="29" width="555" height="28" uuid="93ee8ea4-b12a-4f37-bc49-fc327078152a"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="33" width="290" height="20" uuid="f422937b-50db-4f5e-88e4-d8cd05a3b6be"/>
+				<textElement>
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Material Available Details for a Given Work Order Number]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="381" y="31" width="36" height="20" uuid="3b750486-82cd-4188-9849-93d136d80fb0"/>
+				<text><![CDATA[Unit -]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="416" y="33" width="100" height="20" uuid="96022a75-6524-4959-849d-fad024e1c11c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Unit}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="0" y="51" width="555" height="58" uuid="0c285d0b-08ca-4b17-8b97-2eac31aac80f"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="5" y="60" width="82" height="18" uuid="29f00867-1502-4a4d-94bf-779aa4b93b02"/>
+				<text><![CDATA[WorkOrder No  :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5" y="88" width="82" height="18" uuid="d16bc8b3-b832-427e-a56a-866334603a36"/>
+				<text><![CDATA[WorkOrder Qty  :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="85" y="62" width="134" height="33" uuid="f2b46fe0-52f9-41f4-8d7a-c49cb943d968"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ShopOrderNumber}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="207" y="61" width="94" height="18" uuid="e3a3ca56-f974-4466-8a10-62bb2afe13a8"/>
+				<text><![CDATA[Project Number  :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="212" y="89" width="84" height="18" uuid="7fc3c8a9-103f-4844-80c9-d4c16a405722"/>
+				<text><![CDATA[FG PartNo        :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="293" y="89" width="100" height="20" uuid="51effc8c-ce33-49c1-9637-ace81093b57d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ItemNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="290" y="62" width="101" height="19" uuid="42e8d6c8-633d-419c-b61e-45b737a073a5"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ProjectNumber}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="399" y="60" width="100" height="18" uuid="05a9786b-a99c-456d-90dc-adf836187414"/>
+				<text><![CDATA[WorkOrder Date   :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="491" y="61" width="60" height="18" uuid="a6c8478c-65f9-4586-ac2b-6e035c53f05d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Shoporderdate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="400" y="89" width="92" height="18" uuid="62fed6ae-955f-4392-a0b5-9544cadfdb27"/>
+				<text><![CDATA[CompletionDate   :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="490" y="88" width="60" height="16" uuid="51023f75-b881-44b1-a25e-8d329ecc2f27"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{LastModifiedDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="89" y="89" width="86" height="17" uuid="ee203860-8b88-4587-b022-7129013d4f84"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ShopOrderQty}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="0" y="105" width="555" height="33" uuid="11fa3733-78b1-4d90-aa81-145bd50b7e30"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="1" y="114" width="28" height="22" uuid="6571a508-cf5f-41c8-a158-b8c77732654b"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Black" size="8"/>
+				</textElement>
+				<text><![CDATA[SI.NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="42" y="113" width="69" height="16" uuid="57946286-91e1-4c5c-b5a4-204f055cd496"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Black" size="8"/>
+				</textElement>
+				<text><![CDATA[ Part Number ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="215" y="112" width="64" height="20" uuid="f88c46af-61dc-4dbf-bbea-e7219ecb8edf"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Black" size="8"/>
+				</textElement>
+				<text><![CDATA[Description]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="332" y="112" width="28" height="18" uuid="ab78942a-960b-4f50-acac-892928d6f53d"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Black" size="8"/>
+				</textElement>
+				<text><![CDATA[UOM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="111" width="62" height="22" uuid="8a6bc382-e8ff-4803-9773-f4e670675f48"/>
+				<textElement>
+					<font fontName="Arial Black" size="8"/>
+				</textElement>
+				<text><![CDATA[RequiredQty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="444" y="107" width="50" height="28" uuid="829125bd-d3ad-4459-bc3e-0b533faf3d9c"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Black" size="8"/>
+				</textElement>
+				<text><![CDATA[Issued       Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="499" y="108" width="54" height="28" uuid="2de2f2aa-7b1e-46d4-bab2-50d4782fb6ed"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Black" size="8"/>
+				</textElement>
+				<text><![CDATA[Balance  To  Issue]]></text>
+			</staticText>
+			<line>
+				<reportElement x="30" y="104" width="1" height="33" uuid="d457e55e-c3ee-4214-9232-dab9ab8e840f"/>
+			</line>
+			<line>
+				<reportElement x="145" y="105" width="1" height="33" uuid="f59bce8b-3df0-4f06-a29b-2b2f2cd2e919"/>
+			</line>
+			<line>
+				<reportElement x="327" y="104" width="1" height="33" uuid="9bdd2cbb-0404-478c-b8cc-843a32127163"/>
+			</line>
+			<line>
+				<reportElement x="368" y="105" width="1" height="33" uuid="b7bd650e-a32e-467f-9758-a98d56d65a11"/>
+			</line>
+			<line>
+				<reportElement x="443" y="104" width="1" height="34" uuid="9b66f087-5618-417c-86bf-923d7ef421fd"/>
+			</line>
+			<line>
+				<reportElement x="498" y="105" width="1" height="33" uuid="4a58a6ea-74e8-4bfb-b4fb-5857512ebc9f"/>
+			</line>
+			<image>
+				<reportElement x="0" y="2" width="120" height="26" uuid="8aa399f9-1b9a-46b5-971d-2932da403175"/>
+				<imageExpression><![CDATA["C:/K-Rep/MyReports/TRASCCON LOGO.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<detail>
+		<band height="77" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="50" uuid="0c99c9f1-f7f5-45ea-a48f-12b2e608e75c"/>
+			</rectangle>
+			<textField>
+				<reportElement x="4" y="14" width="22" height="30" uuid="9b84a937-4cfb-4b6f-99a0-49e363e05a33"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="31" y="1" width="114" height="48" uuid="5c2f1817-e2ab-4667-8d9a-82a1b50367d8"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PartNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="148" y="2" width="177" height="48" uuid="486937e0-79ab-487a-8457-34a664bb6aca"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{childdesc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="331" y="7" width="35" height="35" uuid="d3056873-8c1a-4dad-9ee5-2592fb31926c"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{UOM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="370" y="11" width="62" height="30" uuid="624957be-25fd-4f49-9f29-8d83af2be7cd"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RequiredQty}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="454" y="10" width="42" height="30" uuid="0ba4c5cb-be3e-44ac-8017-00c8343fcb40"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{IssuedQty}.setScale(2, RoundingMode.UNNECESSARY)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="498" y="10" width="54" height="30" uuid="f87b3121-3d04-4b19-a6d5-aa6184b19186"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{BalanceToIssue}.setScale(2, RoundingMode.UNNECESSARY)]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="30" y="0" width="1" height="50" uuid="69a3f0e5-7e33-40e0-8345-b7fb23b3d256"/>
+			</line>
+			<line>
+				<reportElement x="145" y="1" width="1" height="49" uuid="834e97ea-01ed-4164-9253-d0c6ddc5e162"/>
+			</line>
+			<line>
+				<reportElement x="327" y="0" width="1" height="49" uuid="b8f6f0c2-a95e-4ccb-b253-351a89e68649"/>
+			</line>
+			<line>
+				<reportElement x="368" y="-1" width="1" height="50" uuid="d02478c5-ac67-4c12-8ff9-57bf0c0efce8"/>
+			</line>
+			<line>
+				<reportElement x="443" y="-1" width="1" height="50" uuid="4ffa9770-1da1-4bd8-9a39-15e235c37947"/>
+			</line>
+			<line>
+				<reportElement x="498" y="0" width="1" height="50" uuid="470e6dc6-4c9e-423d-a72f-275b8c87ce69"/>
+			</line>
+			<subreport>
+				<reportElement x="-2" y="47" width="200" height="30" uuid="a8ca711d-2603-43b7-bf6d-dbe4963a5553"/>
+				<subreportParameter name="partNo">
+					<subreportParameterExpression><![CDATA[$F{PartNumber}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="proNo">
+					<subreportParameterExpression><![CDATA[$F{ProjectNumber}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["/QuoteAndSales/plSubRep2.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

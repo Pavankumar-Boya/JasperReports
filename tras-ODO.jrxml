@@ -1,0 +1,610 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="tras-ODO" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8513bf0f-e46e-4ab6-9d41-388b64e19590">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="T-ODO"/>
+	<property name="ireport.jasperserver.url" value="http://137.59.201.144:8081/jasperserver/"/>
+	<property name="ireport.jasperserver.user" value="jasperadmin"/>
+	<property name="ireport.jasperserver.report.resource" value="/reports/Trasccon_Getapcs/T_OpenDeliveryOrder_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/Trasccon_Getapcs/T_OpenDeliveryOrder"/>
+	<parameter name="OpenDONumber" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+    DATE_FORMAT(oh.ODODate,'%d-%b-%Y') AS openDoDate,
+    od.OpenDONumber,
+    od.CustomerName,
+    od.ResponsiblePerson,
+    od.ReasonForIssuingStock,
+    od.Description as descr,
+    Oh.ODOType,
+    od.DOType,
+    OP.ItemNumber,
+    OP.ItemDescription as childDesc,
+    OP.UOC,
+    OP.DispatchQty,
+    OP.UOM,
+    SUM(OP.DispatchQty) AS TotalDispatchQty,
+    OP.UnitPrice,
+    (OP.UnitPrice * OP.DispatchQty) AS totalvalue,
+	SUM(COALESCE((OP.UnitPrice * OP.DispatchQty), 0)) OVER () AS TOTALQty,
+	SUM(COALESCE(SUM(OP.DispatchQty), 0)) OVER () AS TOTALq,
+    cm.CustomerName,
+    ca.InvoiceAddress,
+    cs.ShippingAddress,
+    vm.VendorName,
+    vad.POAddress,
+    vm.Address
+FROM
+    tras_getapcs_warehouse.opendeliveryorders AS od
+JOIN
+    tras_getapcs_warehouse.opendeliveryorderparts AS OP ON od.Id = OP.OpenDeliveryOrderId
+LEFT JOIN
+    tras_getapcs_warehouse.opendeliveryorderhistories AS oh ON oh.ODONumber = OP.ODONumber
+LEFT JOIN 
+tras_getapcs_master.customermasters AS cm ON cm.CustomerNumber = od.CustomerId
+LEFT JOIN 
+tras_getapcs_master.customeraddresses AS ca ON cm.Id = ca.CustomerMasterId
+LEFT JOIN 
+tras_getapcs_master.customershippingaddresses AS cs ON cs.CustomerMasterId = cm.Id
+LEFT JOIN tras_getapcs_master.vendormasters as vm ON od.CustomerId = vm.VendorId
+LEFT JOIN tras_getapcs_master.addresses AS vad ON vad.VendorMasterId = vm.Id
+WHERE
+    od.OpenDONumber =$P{OpenDONumber}
+GROUP BY
+    od.OpenDONumber,
+    od.CustomerName,
+    od.ResponsiblePerson,
+    od.ReasonForIssuingStock,
+    od.Description,
+    Oh.ODOType,
+    OP.ItemNumber,
+    OP.UOC,
+    OP.UOM,
+    OP.DispatchQty,
+    OP.UnitPrice,
+    oh.ODODate,
+    childDesc,
+    od.DOType,
+        cm.CustomerName,
+    ca.InvoiceAddress,
+    cs.ShippingAddress,
+        vm.VendorName,
+    vad.POAddress,
+        vm.Address]]>
+	</queryString>
+	<field name="openDoDate" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="openDoDate"/>
+		<property name="com.jaspersoft.studio.field.label" value="openDoDate"/>
+	</field>
+	<field name="OpenDONumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="OpenDONumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="OpenDONumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="opendeliveryorders"/>
+	</field>
+	<field name="CustomerName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CustomerName"/>
+		<property name="com.jaspersoft.studio.field.label" value="CustomerName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="opendeliveryorders"/>
+	</field>
+	<field name="ResponsiblePerson" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ResponsiblePerson"/>
+		<property name="com.jaspersoft.studio.field.label" value="ResponsiblePerson"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="opendeliveryorders"/>
+	</field>
+	<field name="ReasonForIssuingStock" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ReasonforIssuingStock"/>
+		<property name="com.jaspersoft.studio.field.label" value="ReasonForIssuingStock"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="opendeliveryorders"/>
+	</field>
+	<field name="descr" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Description"/>
+		<property name="com.jaspersoft.studio.field.label" value="descr"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="opendeliveryorders"/>
+	</field>
+	<field name="ODOType" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ODOType"/>
+		<property name="com.jaspersoft.studio.field.label" value="ODOType"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="opendeliveryorderhistories"/>
+	</field>
+	<field name="DOType" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="DOType"/>
+		<property name="com.jaspersoft.studio.field.label" value="DOType"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="opendeliveryorders"/>
+	</field>
+	<field name="ItemNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ItemNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="ItemNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="opendeliveryorderparts"/>
+	</field>
+	<field name="childDesc" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ItemDescription"/>
+		<property name="com.jaspersoft.studio.field.label" value="childDesc"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="opendeliveryorderparts"/>
+	</field>
+	<field name="UOC" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="UOC"/>
+		<property name="com.jaspersoft.studio.field.label" value="UOC"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="opendeliveryorderparts"/>
+	</field>
+	<field name="DispatchQty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="DispatchQty"/>
+		<property name="com.jaspersoft.studio.field.label" value="DispatchQty"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="opendeliveryorderparts"/>
+	</field>
+	<field name="UOM" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="UOM"/>
+		<property name="com.jaspersoft.studio.field.label" value="UOM"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="opendeliveryorderparts"/>
+	</field>
+	<field name="TotalDispatchQty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TotalDispatchQty"/>
+		<property name="com.jaspersoft.studio.field.label" value="TotalDispatchQty"/>
+	</field>
+	<field name="UnitPrice" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="UnitPrice"/>
+		<property name="com.jaspersoft.studio.field.label" value="UnitPrice"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="opendeliveryorderparts"/>
+	</field>
+	<field name="totalvalue" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="totalvalue"/>
+		<property name="com.jaspersoft.studio.field.label" value="totalvalue"/>
+	</field>
+	<field name="TOTALQty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TOTALQty"/>
+		<property name="com.jaspersoft.studio.field.label" value="TOTALQty"/>
+	</field>
+	<field name="TOTALq" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TOTALq"/>
+		<property name="com.jaspersoft.studio.field.label" value="TOTALq"/>
+	</field>
+	<field name="COLUMN_19" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CustomerName"/>
+		<property name="com.jaspersoft.studio.field.label" value="CustomerName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="InvoiceAddress" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="InvoiceAddress"/>
+		<property name="com.jaspersoft.studio.field.label" value="InvoiceAddress"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customeraddresses"/>
+	</field>
+	<field name="ShippingAddress" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ShippingAddress"/>
+		<property name="com.jaspersoft.studio.field.label" value="ShippingAddress"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customershippingaddresses"/>
+	</field>
+	<field name="VendorName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VendorName"/>
+		<property name="com.jaspersoft.studio.field.label" value="VendorName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vendormasters"/>
+	</field>
+	<field name="POAddress" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="POAddress"/>
+		<property name="com.jaspersoft.studio.field.label" value="POAddress"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="addresses"/>
+	</field>
+	<field name="Address" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Address"/>
+		<property name="com.jaspersoft.studio.field.label" value="Address"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vendormasters"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="241" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="30" width="548" height="80" backcolor="#DBC774" uuid="4f90e379-492d-42af-bfc6-6711bb55b861"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="2" y="35" width="88" height="20" uuid="ac9d30bb-f8b7-42f0-80cb-a7512712d267"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[OpenDONumber ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="89" y="35" width="12" height="14" uuid="14f29064-4330-4321-a8eb-5162c1399724"/>
+				<text><![CDATA[  :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="37" width="110" height="18" uuid="da1fed0f-deb2-4357-8516-578d8dc26665"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OpenDONumber}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="212" y="38" width="60" height="20" uuid="381b1334-954a-4894-8849-069f7e51f723"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Customer   ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="268" y="38" width="12" height="14" uuid="5dbaa471-093f-476b-9298-fb4b4cb40be0"/>
+				<text><![CDATA[  :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="279" y="40" width="97" height="21" uuid="247a7dde-3a30-42b5-80fd-eadbd21906e8"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CustomerName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="383" y="38" width="70" height="20" uuid="23905d12-7503-4031-9059-74bf2233226f">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Open DODate  ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="448" y="38" width="12" height="14" uuid="05fd376b-699e-45a8-b023-df9f2a4cbade"/>
+				<text><![CDATA[  :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="460" y="40" width="80" height="19" uuid="84c19496-ccbb-4d2b-b7c1-91aacf6e1916"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{openDoDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="385" y="68" width="65" height="22" uuid="92611325-59f3-48d1-b5a6-49b5d9bc5b0e"/>
+				<textElement>
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Description  ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="448" y="68" width="12" height="14" uuid="26b59ae2-36ee-4bec-9f3b-556d010c2a1b"/>
+				<text><![CDATA[  :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="459" y="69" width="88" height="34" uuid="b9446623-b058-46bf-b350-64f021803163"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descr}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="279" y="69" width="92" height="20" uuid="28dba347-c475-4de7-9bb9-ac33cd3977a9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DOType}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="268" y="68" width="12" height="14" uuid="0e19a009-387d-43fe-af3c-60264f93aefd"/>
+				<text><![CDATA[  :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="213" y="68" width="56" height="15" uuid="2ca6faee-b74e-4977-a115-8539e9a6bc57"/>
+				<textElement>
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[ODO Type ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="102" y="66" width="100" height="18" uuid="5911010f-933e-4dbe-8402-fe1da487f2a9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ResponsiblePerson}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="90" y="65" width="12" height="14" uuid="4bff09c7-abee-47d4-94c0-cd176afc25d0"/>
+				<text><![CDATA[  :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="66" width="90" height="18" uuid="6e4e235d-2f4c-465f-a2ec-9b3499aaa92a"/>
+				<textElement>
+					<font fontName="Arial Rounded MT Bold" size="9"/>
+				</textElement>
+				<text><![CDATA[Responsible Person ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="89" width="90" height="19" uuid="f94a2711-3220-4f77-878d-01905b54e152"/>
+				<textElement>
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Reason For Issue  ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="90" y="90" width="12" height="14" uuid="b8624943-31c6-4561-896d-aaa4f6b304f9"/>
+				<text><![CDATA[  :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="101" y="91" width="219" height="18" uuid="d22c0846-a856-40d5-9c6d-d5a4a31309eb"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ReasonForIssuingStock}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="0" y="110" width="548" height="23" backcolor="#080707" uuid="9592357d-6ac9-473f-b7ff-97596eda2401">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="83" y="113" width="72" height="15" forecolor="#F7F5F5" uuid="0eaf204d-b992-4ba5-a02b-f8a8f96ad44a"/>
+				<textElement>
+					<font fontName="Arial Black"/>
+				</textElement>
+				<text><![CDATA[BILL TO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="368" y="114" width="72" height="15" forecolor="#FAF7F7" uuid="17d334da-fc84-44b7-af77-8d6ef7aa7c58"/>
+				<textElement>
+					<font fontName="Arial Black"/>
+				</textElement>
+				<text><![CDATA[SHIP TO]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="133" width="548" height="73" backcolor="#C7C5C5" uuid="02c2aad1-1fbe-40f8-8ba7-d568ca7ff0e0"/>
+			</rectangle>
+			<line>
+				<reportElement x="261" y="133" width="1" height="73" uuid="6e4fe2fd-bdf2-4b81-a0dd-8f6cdecf9fe0"/>
+			</line>
+			<rectangle>
+				<reportElement x="1" y="206" width="547" height="35" backcolor="#A69A9A" uuid="a311094a-ca89-4925-a65c-363c77015fa1"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="1" y="214" width="30" height="14" uuid="c2855d5f-68c7-411b-b09c-82454c40fc8b"/>
+				<text><![CDATA[SI.NO]]></text>
+			</staticText>
+			<line>
+				<reportElement x="31" y="206" width="1" height="35" forecolor="#050505" uuid="b308b59a-ab31-42f6-82a5-3b945fbcf569"/>
+			</line>
+			<staticText>
+				<reportElement x="33" y="213" width="90" height="22" uuid="2375ce4c-f07c-40ea-b273-f5c3e791f202"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[KPN]]></text>
+			</staticText>
+			<line>
+				<reportElement x="130" y="206" width="1" height="35" forecolor="#050505" uuid="f3969157-11ef-4c0a-86ee-d9d0a50b1d3e"/>
+			</line>
+			<staticText>
+				<reportElement x="131" y="213" width="142" height="22" uuid="4001edb1-747d-4921-9103-ab4d43101848"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[           Description]]></text>
+			</staticText>
+			<line>
+				<reportElement x="290" y="206" width="1" height="35" forecolor="#050505" uuid="594baf19-8e6e-4ce3-8a1c-97521ce0c342"/>
+			</line>
+			<staticText>
+				<reportElement x="289" y="213" width="50" height="22" uuid="8ecf7f5a-4a0a-40f0-8853-eb4939db9352"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold" size="10"/>
+				</textElement>
+				<text><![CDATA[UOM]]></text>
+			</staticText>
+			<line>
+				<reportElement x="342" y="206" width="1" height="35" forecolor="#050505" uuid="cd375c16-3262-418f-a91f-7f70497f5d0f"/>
+			</line>
+			<staticText>
+				<reportElement x="346" y="212" width="38" height="22" uuid="5ab2d11f-d64c-46ae-a2a8-54d9772c10fb"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold" size="10"/>
+				</textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<line>
+				<reportElement x="386" y="206" width="1" height="35" forecolor="#050505" uuid="b23375f8-b4f0-48d3-bee8-fd6facc87044"/>
+			</line>
+			<staticText>
+				<reportElement x="395" y="213" width="44" height="28" uuid="db007a0c-9a50-4fce-a488-b4fe3cf486b9"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[Unit          Price]]></text>
+			</staticText>
+			<line>
+				<reportElement x="440" y="206" width="1" height="35" forecolor="#050505" uuid="df8c6666-610b-404c-93dd-4c8b176350b5"/>
+			</line>
+			<staticText>
+				<reportElement x="443" y="213" width="44" height="24" uuid="e8cd744d-2bad-492d-a221-38f3db8893a1"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[UOC]]></text>
+			</staticText>
+			<line>
+				<reportElement x="487" y="206" width="1" height="35" forecolor="#050505" uuid="989ed859-5e09-43bb-a887-e0cea4c32aed"/>
+			</line>
+			<staticText>
+				<reportElement x="485" y="215" width="64" height="18" uuid="221ed10b-b4cf-48e2-9d4e-4e83d2067ed3"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Rounded MT Bold"/>
+				</textElement>
+				<text><![CDATA[TotalValue]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="206" y="3" width="142" height="25" uuid="fecd2d5f-0b95-4d48-a20e-93d17dd8a8e2"/>
+				<textElement>
+					<font fontName="Arial Black" size="12"/>
+				</textElement>
+				<text><![CDATA[OpenDeliveryOrder]]></text>
+			</staticText>
+			<image>
+				<reportElement x="1" y="-1" width="117" height="29" uuid="c50260fe-c3ab-486c-9984-b66836d659ec"/>
+				<imageExpression><![CDATA["C:/K-Rep/MyReports/TRASCCON LOGO.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="5" y="137" width="236" height="24" uuid="41e7dd7d-368c-4dfe-837c-80d22a68ddf6"/>
+				<textFieldExpression><![CDATA[$F{CustomerName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="264" y="137" width="279" height="24" uuid="0709eceb-7d24-45a7-aa8a-8bc76b81c70d"/>
+				<textFieldExpression><![CDATA[$F{CustomerName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="5" y="158" width="256" height="42" uuid="ed8f6b63-124b-4d84-aa50-6d212d4bf193"/>
+				<textFieldExpression><![CDATA[$F{Address}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="265" y="162" width="274" height="42" uuid="4572681a-05a9-4b54-b2e5-1362a80d93d5"/>
+				<textFieldExpression><![CDATA[$F{ShippingAddress}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="50" splitType="Stretch">
+			<rectangle>
+				<reportElement x="1" y="-1" width="547" height="50" backcolor="#C7C5C5" uuid="31176dfc-fa0f-4357-9dd5-e183fa9c015f"/>
+			</rectangle>
+			<textField>
+				<reportElement x="4" y="2" width="22" height="18" uuid="5be94794-c785-449e-abb9-d8c725e8d7f2"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="31" y="0" width="95" height="47" uuid="9d0b41a8-045f-4a48-a155-3cb355174a9f"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{ItemNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="131" y="0" width="156" height="47" uuid="bbf15100-2196-4468-bd14-7e6d620fceff"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{childDesc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="290" y="11" width="48" height="34" uuid="8603169a-f9e1-4fd3-a88d-33c085a46304"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{UOM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="345" y="10" width="38" height="28" uuid="52f2dd9c-cd5f-4665-9ff7-067d7af2c0d8"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{DispatchQty}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="386" y="11" width="51" height="30" uuid="7775eb15-2d8a-4d0c-9785-53eb00fc5017"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{UnitPrice}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="441" y="10" width="44" height="30" uuid="d8703ad4-7576-415c-a051-53ec271e63a0"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{UOC}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="31" y="-1" width="1" height="49" forecolor="#050505" uuid="9c749ec4-881b-4445-8448-32d48d9750bd"/>
+			</line>
+			<line>
+				<reportElement x="130" y="-1" width="1" height="49" forecolor="#050505" uuid="5c54abb9-7c22-4dcb-97fe-238337dcd7da"/>
+			</line>
+			<line>
+				<reportElement x="290" y="-1" width="1" height="49" forecolor="#050505" uuid="ff152de8-d3c7-4889-86b4-b62daac49782"/>
+			</line>
+			<line>
+				<reportElement x="342" y="-1" width="1" height="50" forecolor="#050505" uuid="419e2bdc-606a-4e18-8574-3007a48c8e91"/>
+			</line>
+			<line>
+				<reportElement x="386" y="-2" width="1" height="51" forecolor="#050505" uuid="89b8fae4-6e15-403f-90b5-216833164151"/>
+			</line>
+			<line>
+				<reportElement x="440" y="-1" width="1" height="49" forecolor="#050505" uuid="dfffc2f6-8bcc-4cdd-a554-f9f02e4b500f"/>
+			</line>
+			<line>
+				<reportElement x="487" y="-1" width="1" height="50" forecolor="#050505" uuid="496d50f6-fc54-47c1-b740-f580850057a4"/>
+			</line>
+			<textField>
+				<reportElement x="492" y="11" width="51" height="30" uuid="d2a0b031-95d2-40fd-9a93-bbb007a12938"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{totalvalue}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="193" splitType="Stretch">
+			<rectangle>
+				<reportElement x="1" y="-4" width="547" height="31" uuid="a68f21c3-cc44-4c18-b34b-042a24eed00f"/>
+			</rectangle>
+			<line>
+				<reportElement x="130" y="-4" width="1" height="31" forecolor="#050505" uuid="ebbd8efb-66e5-4a36-a51f-8d73e8dfb780"/>
+			</line>
+			<staticText>
+				<reportElement x="150" y="-2" width="155" height="30" uuid="a497f907-31aa-4365-af87-63bf159e38f7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Quantity ]]></text>
+			</staticText>
+			<line>
+				<reportElement x="342" y="-4" width="1" height="31" forecolor="#050505" uuid="e6191fa7-7573-4d8e-96de-f1f47a59a8c2"/>
+			</line>
+			<textField>
+				<reportElement x="346" y="1" width="38" height="23" uuid="79c8701d-2bc6-43f0-94b2-475c2cbc0177"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{TOTALq}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="391" y="-2" width="94" height="30" uuid="ad081f59-2f38-4ef4-957c-199cfbe4088d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Value]]></text>
+			</staticText>
+			<line>
+				<reportElement x="386" y="-4" width="1" height="31" forecolor="#050505" uuid="6d75db29-79f0-4488-ae4b-fbdd80a0b1c1"/>
+			</line>
+			<line>
+				<reportElement x="487" y="-4" width="1" height="31" forecolor="#050505" uuid="faf5ff3c-91a1-47f1-9aec-9ab2fe07ca52"/>
+			</line>
+			<staticText>
+				<reportElement x="5" y="36" width="100" height="30" uuid="ba6de6d5-7253-4836-9cba-f540f72c81c7"/>
+				<textElement>
+					<font fontName="Arial Black" size="12"/>
+				</textElement>
+				<text><![CDATA[Remarks :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="78" y="38" width="370" height="30" uuid="d2b535a6-def9-4638-8a1e-500579fb1657"/>
+				<text><![CDATA[Please Check all the materials mentioned in the DO before leaving the store.]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="70" width="549" height="26" backcolor="#A8A5A5" uuid="1796504a-5034-43d4-a209-165be8c62ea4"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="96" width="549" height="90" backcolor="#A8A5A5" uuid="a6ba51b2-7d17-414d-8112-1d1b3ce75bab"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="10" y="100" width="69" height="18" uuid="5b566bcf-742e-4592-8fc2-811e2c75f09b"/>
+				<text><![CDATA[Issued By: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="167" width="60" height="20" uuid="cdcbb6e7-533d-4457-b40d-ce41b091df0f"/>
+				<text><![CDATA[Signature]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="198" y="166" width="68" height="20" uuid="c0e40361-2eb3-45f1-8ba7-53ae1ec15c38"/>
+				<text><![CDATA[Signature]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="190" y="100" width="74" height="22" uuid="9e7d2bba-6297-4afb-8a31-0a26a5a5a378"/>
+				<text><![CDATA[Approved By]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="349" y="98" width="74" height="22" uuid="baf12867-afd4-4774-9de2-fcb76dbfc5b1"/>
+				<text><![CDATA[Received By   :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="358" y="164" width="59" height="20" uuid="3e3434b4-86cf-4712-bb16-f21aaf3f79e4"/>
+				<text><![CDATA[Signature]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="490" y="4" width="55" height="20" uuid="7048848b-c99e-4c58-bea0-3971bcdca18b"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$F{TOTALQty}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

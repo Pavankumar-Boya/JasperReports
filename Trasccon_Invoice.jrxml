@@ -1,0 +1,2132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportinvoice" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7f6b4c17-9484-4584-bb3c-d9853dd24f2c">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="TrascconReports\Tras-InvoiceSubreportAdapter.jrdax"/>
+	<property name="ireport.jasperserver.url" value="https://reports.getapcs.com/jasperserver/"/>
+	<property name="ireport.jasperserver.user" value="nayagam"/>
+	<property name="ireport.jasperserver.report.resource" value="/reports/Trasccon_Getapcs/DEMO_Invoice_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/Trasccon_Getapcs/DEMO_Invoice"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="326"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="668"/>
+	<parameter name="InvoiceNumber" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[select invoices.Id,
+invoices.InvoiceNumber,
+invoices.CustomerName,
+invoices.CustomerId,
+invoices.CustomerAliasName,
+invoices.CompanyName,
+invoices.DOType,
+invoices.Remarks,
+invoices.Unit,
+invoices.CreatedBy,
+DATE_FORMAT(invoices.CreatedOn,'%d-%b-%Y' ) AS CreatedOn,
+invoices.LastModifiedBy,
+invoices.LastModifiedOn,
+invoicechilditems.*,
+salesorders.*,
+customermasters.*,
+customeraddresses.*,
+customershippingaddresses.*,
+companybankings.*,
+companymasters.*,
+customercontacts.*,
+
+ (SELECT SUM(COALESCE(TotalValue, 0)) FROM tras_getapcs_warehouse.invoicechilditems WHERE InvoiceId = invoices.Id) AS FinalTaxAmt
+
+
+from tras_getapcs_warehouse.invoices LEFT JOIN tras_getapcs_warehouse.invoicechilditems ON tras_getapcs_warehouse.invoices.`Id` = tras_getapcs_warehouse.invoicechilditems.`InvoiceId`
+LEFT JOIN tras_getapcs_sales.salesorders ON tras_getapcs_sales.salesorders .`CustomerId` = tras_getapcs_warehouse.invoices.`CustomerId`
+LEFT JOIN tras_getapcs_master.customermasters ON tras_getapcs_master.customermasters.`Id`= tras_getapcs_warehouse.invoices.`CustomerId` 
+LEFT JOIN tras_getapcs_master.customercontacts ON tras_getapcs_master.customercontacts.`CustomerMasterId` = tras_getapcs_master.customermasters.`Id`
+LEFT JOIN  tras_getapcs_master.customeraddresses ON tras_getapcs_master.customermasters.`Id`=tras_getapcs_master.customeraddresses.`CustomerMasterId` 
+LEFT JOIN  tras_getapcs_master.customershippingaddresses ON tras_getapcs_master.customermasters.`Id`=tras_getapcs_master.customershippingaddresses.`CustomerMasterId` 
+LEFT JOIN tras_getapcs_master.companymasters ON tras_getapcs_master.companymasters.`CompanyName` = tras_getapcs_warehouse.invoices.`CompanyName`
+LEFT JOIN tras_getapcs_master.companybankings ON tras_getapcs_master.companybankings.`CompanyMasterId` = tras_getapcs_master.companymasters.`Id`
+
+
+WHERE tras_getapcs_warehouse.invoices.`InvoiceNumber`=$P{InvoiceNumber}]]>
+	</queryString>
+	<field name="Id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="Id"/>
+		<property name="com.jaspersoft.studio.field.label" value="Id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoices"/>
+	</field>
+	<field name="InvoiceNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="InvoiceNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="InvoiceNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoices"/>
+	</field>
+	<field name="CustomerName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CustomerName"/>
+		<property name="com.jaspersoft.studio.field.label" value="CustomerName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoices"/>
+	</field>
+	<field name="CustomerId" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CustomerId"/>
+		<property name="com.jaspersoft.studio.field.label" value="CustomerId"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoices"/>
+	</field>
+	<field name="CustomerAliasName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CustomerAliasName"/>
+		<property name="com.jaspersoft.studio.field.label" value="CustomerAliasName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoices"/>
+	</field>
+	<field name="CompanyName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CompanyName"/>
+		<property name="com.jaspersoft.studio.field.label" value="CompanyName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoices"/>
+	</field>
+	<field name="DOType" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="DOType"/>
+		<property name="com.jaspersoft.studio.field.label" value="DOType"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoices"/>
+	</field>
+	<field name="Remarks" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Remarks"/>
+		<property name="com.jaspersoft.studio.field.label" value="Remarks"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoices"/>
+	</field>
+	<field name="Unit" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Unit"/>
+		<property name="com.jaspersoft.studio.field.label" value="Unit"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoices"/>
+	</field>
+	<field name="CreatedBy" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CreatedBy"/>
+		<property name="com.jaspersoft.studio.field.label" value="CreatedBy"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoices"/>
+	</field>
+	<field name="CreatedOn" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CreatedOn"/>
+		<property name="com.jaspersoft.studio.field.label" value="CreatedOn"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoices"/>
+	</field>
+	<field name="LastModifiedBy" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="LastModifiedBy"/>
+		<property name="com.jaspersoft.studio.field.label" value="LastModifiedBy"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoices"/>
+	</field>
+	<field name="LastModifiedOn" class="java.time.LocalDateTime">
+		<property name="com.jaspersoft.studio.field.name" value="LastModifiedOn"/>
+		<property name="com.jaspersoft.studio.field.label" value="LastModifiedOn"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoices"/>
+	</field>
+	<field name="COLUMN_14" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="Id"/>
+		<property name="com.jaspersoft.studio.field.label" value="Id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoicechilditems"/>
+	</field>
+	<field name="DONumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="DONumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="DONumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoicechilditems"/>
+	</field>
+	<field name="FGItemNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="FGItemNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="FGItemNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoicechilditems"/>
+	</field>
+	<field name="Description" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Description"/>
+		<property name="com.jaspersoft.studio.field.label" value="Description"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoicechilditems"/>
+	</field>
+	<field name="InvoicedQty" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="InvoicedQty"/>
+		<property name="com.jaspersoft.studio.field.label" value="InvoicedQty"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoicechilditems"/>
+	</field>
+	<field name="UOM" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="UOM"/>
+		<property name="com.jaspersoft.studio.field.label" value="UOM"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoicechilditems"/>
+	</field>
+	<field name="PartType" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PartType"/>
+		<property name="com.jaspersoft.studio.field.label" value="PartType"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoicechilditems"/>
+	</field>
+	<field name="SerialNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="SerialNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="SerialNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoicechilditems"/>
+	</field>
+	<field name="BtoDeliveryOrderPartsId" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="BtoDeliveryOrderPartsId"/>
+		<property name="com.jaspersoft.studio.field.label" value="BtoDeliveryOrderPartsId"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoicechilditems"/>
+	</field>
+	<field name="UnitPrice" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="UnitPrice"/>
+		<property name="com.jaspersoft.studio.field.label" value="UnitPrice"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoicechilditems"/>
+	</field>
+	<field name="UOC" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="UOC"/>
+		<property name="com.jaspersoft.studio.field.label" value="UOC"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoicechilditems"/>
+	</field>
+	<field name="TotalValue" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TotalValue"/>
+		<property name="com.jaspersoft.studio.field.label" value="TotalValue"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoicechilditems"/>
+	</field>
+	<field name="SalesOrderID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="SalesOrderID"/>
+		<property name="com.jaspersoft.studio.field.label" value="SalesOrderID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoicechilditems"/>
+	</field>
+	<field name="SGST" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="SGST"/>
+		<property name="com.jaspersoft.studio.field.label" value="SGST"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoicechilditems"/>
+	</field>
+	<field name="IGST" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="IGST"/>
+		<property name="com.jaspersoft.studio.field.label" value="IGST"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoicechilditems"/>
+	</field>
+	<field name="CGST" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="CGST"/>
+		<property name="com.jaspersoft.studio.field.label" value="CGST"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoicechilditems"/>
+	</field>
+	<field name="UTGST" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="UTGST"/>
+		<property name="com.jaspersoft.studio.field.label" value="UTGST"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoicechilditems"/>
+	</field>
+	<field name="TotalValueWithTax" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TotalValueWithTax"/>
+		<property name="com.jaspersoft.studio.field.label" value="TotalValueWithTax"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoicechilditems"/>
+	</field>
+	<field name="InvoiceId" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="InvoiceId"/>
+		<property name="com.jaspersoft.studio.field.label" value="InvoiceId"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoicechilditems"/>
+	</field>
+	<field name="Discount" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="Discount"/>
+		<property name="com.jaspersoft.studio.field.label" value="Discount"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoicechilditems"/>
+	</field>
+	<field name="DiscountType" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="DiscountType"/>
+		<property name="com.jaspersoft.studio.field.label" value="DiscountType"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="invoicechilditems"/>
+	</field>
+	<field name="COLUMN_35" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="Id"/>
+		<property name="com.jaspersoft.studio.field.label" value="Id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="SalesOrderNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="SalesOrderNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="SalesOrderNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="ProjectNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ProjectNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="ProjectNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="QuoteNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="QuoteNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="QuoteNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="OrderDate" class="java.time.LocalDateTime">
+		<property name="com.jaspersoft.studio.field.name" value="OrderDate"/>
+		<property name="com.jaspersoft.studio.field.label" value="OrderDate"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="OrderType" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="OrderType"/>
+		<property name="com.jaspersoft.studio.field.label" value="OrderType"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="COLUMN_41" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CustomerName"/>
+		<property name="com.jaspersoft.studio.field.label" value="CustomerName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="COLUMN_42" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CustomerId"/>
+		<property name="com.jaspersoft.studio.field.label" value="CustomerId"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="RevisionNumber" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="RevisionNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="RevisionNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="SOStatus" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="SOStatus"/>
+		<property name="com.jaspersoft.studio.field.label" value="SOStatus"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="PONumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PONumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="PONumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="PODate" class="java.time.LocalDateTime">
+		<property name="com.jaspersoft.studio.field.name" value="PODate"/>
+		<property name="com.jaspersoft.studio.field.label" value="PODate"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="ReceivedDate" class="java.time.LocalDateTime">
+		<property name="com.jaspersoft.studio.field.name" value="ReceivedDate"/>
+		<property name="com.jaspersoft.studio.field.label" value="ReceivedDate"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="BillTo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="BillTo"/>
+		<property name="com.jaspersoft.studio.field.label" value="BillTo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="BillToId" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="BillToId"/>
+		<property name="com.jaspersoft.studio.field.label" value="BillToId"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="ShipTo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ShipTo"/>
+		<property name="com.jaspersoft.studio.field.label" value="ShipTo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="ShipToId" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="ShipToId"/>
+		<property name="com.jaspersoft.studio.field.label" value="ShipToId"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="PaymentTerms" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PaymentTerms"/>
+		<property name="com.jaspersoft.studio.field.label" value="PaymentTerms"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="Total" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="Total"/>
+		<property name="com.jaspersoft.studio.field.label" value="Total"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="COLUMN_54" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Remarks"/>
+		<property name="com.jaspersoft.studio.field.label" value="Remarks"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="COLUMN_55" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Unit"/>
+		<property name="com.jaspersoft.studio.field.label" value="Unit"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="IsShortClosed" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="IsShortClosed"/>
+		<property name="com.jaspersoft.studio.field.label" value="IsShortClosed"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="ShortClosedBy" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ShortClosedBy"/>
+		<property name="com.jaspersoft.studio.field.label" value="ShortClosedBy"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="ShortClosedOn" class="java.time.LocalDateTime">
+		<property name="com.jaspersoft.studio.field.name" value="ShortClosedOn"/>
+		<property name="com.jaspersoft.studio.field.label" value="ShortClosedOn"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="ReasonForModification" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ReasonForModification"/>
+		<property name="com.jaspersoft.studio.field.label" value="ReasonForModification"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="COLUMN_60" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CreatedBy"/>
+		<property name="com.jaspersoft.studio.field.label" value="CreatedBy"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="COLUMN_61" class="java.time.LocalDateTime">
+		<property name="com.jaspersoft.studio.field.name" value="CreatedOn"/>
+		<property name="com.jaspersoft.studio.field.label" value="CreatedOn"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="COLUMN_62" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="LastModifiedBy"/>
+		<property name="com.jaspersoft.studio.field.label" value="LastModifiedBy"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="COLUMN_63" class="java.time.LocalDateTime">
+		<property name="com.jaspersoft.studio.field.name" value="LastModifiedOn"/>
+		<property name="com.jaspersoft.studio.field.label" value="LastModifiedOn"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="SalesOrderStatus" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="SalesOrderStatus"/>
+		<property name="com.jaspersoft.studio.field.label" value="SalesOrderStatus"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="QuoteRevisionNumber" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="QuoteRevisionNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="QuoteRevisionNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="TypeOfSolution" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TypeOfSolution"/>
+		<property name="com.jaspersoft.studio.field.label" value="TypeOfSolution"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="ProductType" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ProductType"/>
+		<property name="com.jaspersoft.studio.field.label" value="ProductType"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="InstallationCharges" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="InstallationCharges"/>
+		<property name="com.jaspersoft.studio.field.label" value="InstallationCharges"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="TotalAmountWithInstallationCharges" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TotalAmountWithInstallationCharges"/>
+		<property name="com.jaspersoft.studio.field.label" value="TotalAmountWithInstallationCharges"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="TotalAdditionalCharges" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TotalAdditionalCharges"/>
+		<property name="com.jaspersoft.studio.field.label" value="TotalAdditionalCharges"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="SpecialDiscountType" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="SpecialDiscountType"/>
+		<property name="com.jaspersoft.studio.field.label" value="SpecialDiscountType"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="SpecialDiscountAmount" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="SpecialDiscountAmount"/>
+		<property name="com.jaspersoft.studio.field.label" value="SpecialDiscountAmount"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="TotalAmount" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TotalAmount"/>
+		<property name="com.jaspersoft.studio.field.label" value="TotalAmount"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="TotalFinalAmount" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TotalFinalAmount"/>
+		<property name="com.jaspersoft.studio.field.label" value="TotalFinalAmount"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="LeadId" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="LeadId"/>
+		<property name="com.jaspersoft.studio.field.label" value="LeadId"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="ConfirmStatus" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="ConfirmStatus"/>
+		<property name="com.jaspersoft.studio.field.label" value="ConfirmStatus"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="ApproveStatus" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="ApproveStatus"/>
+		<property name="com.jaspersoft.studio.field.label" value="ApproveStatus"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="ConfirmDate" class="java.time.LocalDateTime">
+		<property name="com.jaspersoft.studio.field.name" value="ConfirmDate"/>
+		<property name="com.jaspersoft.studio.field.label" value="ConfirmDate"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="SoConfirmationStatus" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="SoConfirmationStatus"/>
+		<property name="com.jaspersoft.studio.field.label" value="SoConfirmationStatus"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="salesorders"/>
+	</field>
+	<field name="COLUMN_80" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="Id"/>
+		<property name="com.jaspersoft.studio.field.label" value="Id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="CustomerNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CustomerNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="CustomerNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="COLUMN_82" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CustomerName"/>
+		<property name="com.jaspersoft.studio.field.label" value="CustomerName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="COLUMN_83" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CustomerAliasName"/>
+		<property name="com.jaspersoft.studio.field.label" value="CustomerAliasName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="CustomerType" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CustomerType"/>
+		<property name="com.jaspersoft.studio.field.label" value="CustomerType"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="Address" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Address"/>
+		<property name="com.jaspersoft.studio.field.label" value="Address"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="City" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="City"/>
+		<property name="com.jaspersoft.studio.field.label" value="City"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="State" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="State"/>
+		<property name="com.jaspersoft.studio.field.label" value="State"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="Country" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Country"/>
+		<property name="com.jaspersoft.studio.field.label" value="Country"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="PinZipCode" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PinZipCode"/>
+		<property name="com.jaspersoft.studio.field.label" value="PinZipCode"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="Segment" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Segment"/>
+		<property name="com.jaspersoft.studio.field.label" value="Segment"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="BoardNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="BoardNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="BoardNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="Website" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Website"/>
+		<property name="com.jaspersoft.studio.field.label" value="Website"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="GeneralEmail" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="GeneralEmail"/>
+		<property name="com.jaspersoft.studio.field.label" value="GeneralEmail"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="Currency" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Currency"/>
+		<property name="com.jaspersoft.studio.field.label" value="Currency"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="GooglePinLocation" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="GooglePinLocation"/>
+		<property name="com.jaspersoft.studio.field.label" value="GooglePinLocation"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="TypeOfCompany" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TypeOfCompany"/>
+		<property name="com.jaspersoft.studio.field.label" value="TypeOfCompany"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="ExportUnitType" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ExportUnitType"/>
+		<property name="com.jaspersoft.studio.field.label" value="ExportUnitType"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="GeneralMSME" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="GeneralMSME"/>
+		<property name="com.jaspersoft.studio.field.label" value="GeneralMSME"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="SalesManager" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="SalesManager"/>
+		<property name="com.jaspersoft.studio.field.label" value="SalesManager"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="SalesManagerCode" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="SalesManagerCode"/>
+		<property name="com.jaspersoft.studio.field.label" value="SalesManagerCode"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="Region" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Region"/>
+		<property name="com.jaspersoft.studio.field.label" value="Region"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="RelatedCustomerName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="RelatedCustomerName"/>
+		<property name="com.jaspersoft.studio.field.label" value="RelatedCustomerName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="RelatedCustomerAlias" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="RelatedCustomerAlias"/>
+		<property name="com.jaspersoft.studio.field.label" value="RelatedCustomerAlias"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="NatureOfRelationship" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NatureOfRelationship"/>
+		<property name="com.jaspersoft.studio.field.label" value="NatureOfRelationship"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="PartialDispatch" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="PartialDispatch"/>
+		<property name="com.jaspersoft.studio.field.label" value="PartialDispatch"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="DropShipment" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="DropShipment"/>
+		<property name="com.jaspersoft.studio.field.label" value="DropShipment"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="PackingInstructions" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PackingInstructions"/>
+		<property name="com.jaspersoft.studio.field.label" value="PackingInstructions"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="SpecialInstructions" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="SpecialInstructions"/>
+		<property name="com.jaspersoft.studio.field.label" value="SpecialInstructions"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="PODReq" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="PODReq"/>
+		<property name="com.jaspersoft.studio.field.label" value="PODReq"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="ShipmentInstructions" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ShipmentInstructions"/>
+		<property name="com.jaspersoft.studio.field.label" value="ShipmentInstructions"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="PreferredFreightForwarder" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PreferredFreightForwarder"/>
+		<property name="com.jaspersoft.studio.field.label" value="PreferredFreightForwarder"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="Advance" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Advance"/>
+		<property name="com.jaspersoft.studio.field.label" value="Advance"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="COLUMN_113" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PaymentTerms"/>
+		<property name="com.jaspersoft.studio.field.label" value="PaymentTerms"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="INCOTerms" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="INCOTerms"/>
+		<property name="com.jaspersoft.studio.field.label" value="INCOTerms"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="SpecialTerms" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="SpecialTerms"/>
+		<property name="com.jaspersoft.studio.field.label" value="SpecialTerms"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="LDApplicable" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="LDApplicable"/>
+		<property name="com.jaspersoft.studio.field.label" value="LDApplicable"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="LDApplicableValue" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="LDApplicableValue"/>
+		<property name="com.jaspersoft.studio.field.label" value="LDApplicableValue"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="SourceInspection" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="SourceInspection"/>
+		<property name="com.jaspersoft.studio.field.label" value="SourceInspection"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="SourceInspectionValue" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="SourceInspectionValue"/>
+		<property name="com.jaspersoft.studio.field.label" value="SourceInspectionValue"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="Others" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Others"/>
+		<property name="com.jaspersoft.studio.field.label" value="Others"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="Incorporation" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="Incorporation"/>
+		<property name="com.jaspersoft.studio.field.label" value="Incorporation"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="TIN" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="TIN"/>
+		<property name="com.jaspersoft.studio.field.label" value="TIN"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="GST" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="GST"/>
+		<property name="com.jaspersoft.studio.field.label" value="GST"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="IEC" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="IEC"/>
+		<property name="com.jaspersoft.studio.field.label" value="IEC"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="PAN" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="PAN"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAN"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="UdhyamCertificate" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="UdhyamCertificate"/>
+		<property name="com.jaspersoft.studio.field.label" value="UdhyamCertificate"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="MSME" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="MSME"/>
+		<property name="com.jaspersoft.studio.field.label" value="MSME"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="TurnOver" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TurnOver"/>
+		<property name="com.jaspersoft.studio.field.label" value="TurnOver"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="DNBNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="DNBNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="DNBNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="ICRA" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ICRA"/>
+		<property name="com.jaspersoft.studio.field.label" value="ICRA"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="HeadCount" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="HeadCount"/>
+		<property name="com.jaspersoft.studio.field.label" value="HeadCount"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="Capacity" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Capacity"/>
+		<property name="com.jaspersoft.studio.field.label" value="Capacity"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="FloorSpace" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="FloorSpace"/>
+		<property name="com.jaspersoft.studio.field.label" value="FloorSpace"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="Machine" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Machine"/>
+		<property name="com.jaspersoft.studio.field.label" value="Machine"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="ToolsAndEquip" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ToolsAndEquip"/>
+		<property name="com.jaspersoft.studio.field.label" value="ToolsAndEquip"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="ERP" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="ERP"/>
+		<property name="com.jaspersoft.studio.field.label" value="ERP"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="ERPValue" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ERPValue"/>
+		<property name="com.jaspersoft.studio.field.label" value="ERPValue"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="ESDSetup" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ESDSetup"/>
+		<property name="com.jaspersoft.studio.field.label" value="ESDSetup"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="HazmatSetup" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="HazmatSetup"/>
+		<property name="com.jaspersoft.studio.field.label" value="HazmatSetup"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="COLUMN_140" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="UOM"/>
+		<property name="com.jaspersoft.studio.field.label" value="UOM"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="Sqft" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Sqft"/>
+		<property name="com.jaspersoft.studio.field.label" value="Sqft"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="MachineDetails" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MachineDetails"/>
+		<property name="com.jaspersoft.studio.field.label" value="MachineDetails"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="ToolsAndEquipDetails" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ToolsAndEquipDetails"/>
+		<property name="com.jaspersoft.studio.field.label" value="ToolsAndEquipDetails"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="ERPDetails" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="ERPDetails"/>
+		<property name="com.jaspersoft.studio.field.label" value="ERPDetails"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="ESDSetupDetails" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ESDSetupDetails"/>
+		<property name="com.jaspersoft.studio.field.label" value="ESDSetupDetails"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="HazmatSetupDetails" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="HazmatSetupDetails"/>
+		<property name="com.jaspersoft.studio.field.label" value="HazmatSetupDetails"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="OSP" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="OSP"/>
+		<property name="com.jaspersoft.studio.field.label" value="OSP"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="OSPValue" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="OSPValue"/>
+		<property name="com.jaspersoft.studio.field.label" value="OSPValue"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="ScopeOfSupply" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ScopeOfSupply"/>
+		<property name="com.jaspersoft.studio.field.label" value="ScopeOfSupply"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="CustomerCategory" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CustomerCategory"/>
+		<property name="com.jaspersoft.studio.field.label" value="CustomerCategory"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="BasisOfApproval" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="BasisOfApproval"/>
+		<property name="com.jaspersoft.studio.field.label" value="BasisOfApproval"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="ApprovalDate" class="java.time.LocalDateTime">
+		<property name="com.jaspersoft.studio.field.name" value="ApprovalDate"/>
+		<property name="com.jaspersoft.studio.field.label" value="ApprovalDate"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="ApprovalBy" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ApprovalBy"/>
+		<property name="com.jaspersoft.studio.field.label" value="ApprovalBy"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="Upload" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Upload"/>
+		<property name="com.jaspersoft.studio.field.label" value="Upload"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="ReAudit" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="ReAudit"/>
+		<property name="com.jaspersoft.studio.field.label" value="ReAudit"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="AuditFrequency" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="AuditFrequency"/>
+		<property name="com.jaspersoft.studio.field.label" value="AuditFrequency"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="CustomerApprove" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CustomerApprove"/>
+		<property name="com.jaspersoft.studio.field.label" value="CustomerApprove"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="COLUMN_158" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Unit"/>
+		<property name="com.jaspersoft.studio.field.label" value="Unit"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="COLUMN_159" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CreatedBy"/>
+		<property name="com.jaspersoft.studio.field.label" value="CreatedBy"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="COLUMN_160" class="java.time.LocalDateTime">
+		<property name="com.jaspersoft.studio.field.name" value="CreatedOn"/>
+		<property name="com.jaspersoft.studio.field.label" value="CreatedOn"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="COLUMN_161" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="LastModifiedBy"/>
+		<property name="com.jaspersoft.studio.field.label" value="LastModifiedBy"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="COLUMN_162" class="java.time.LocalDateTime">
+		<property name="com.jaspersoft.studio.field.name" value="LastModifiedOn"/>
+		<property name="com.jaspersoft.studio.field.label" value="LastModifiedOn"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="IsActive" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="IsActive"/>
+		<property name="com.jaspersoft.studio.field.label" value="IsActive"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="ShippingMode" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ShippingMode"/>
+		<property name="com.jaspersoft.studio.field.label" value="ShippingMode"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customermasters"/>
+	</field>
+	<field name="COLUMN_165" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="Id"/>
+		<property name="com.jaspersoft.studio.field.label" value="Id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customeraddresses"/>
+	</field>
+	<field name="InvoiceAddress" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="InvoiceAddress"/>
+		<property name="com.jaspersoft.studio.field.label" value="InvoiceAddress"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customeraddresses"/>
+	</field>
+	<field name="GSTNNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="GSTNNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="GSTNNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customeraddresses"/>
+	</field>
+	<field name="PANNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PANNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="PANNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customeraddresses"/>
+	</field>
+	<field name="SameAsAddress" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="SameAsAddress"/>
+		<property name="com.jaspersoft.studio.field.label" value="SameAsAddress"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customeraddresses"/>
+	</field>
+	<field name="COLUMN_170" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="IsActive"/>
+		<property name="com.jaspersoft.studio.field.label" value="IsActive"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customeraddresses"/>
+	</field>
+	<field name="COLUMN_171" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CreatedBy"/>
+		<property name="com.jaspersoft.studio.field.label" value="CreatedBy"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customeraddresses"/>
+	</field>
+	<field name="COLUMN_172" class="java.time.LocalDateTime">
+		<property name="com.jaspersoft.studio.field.name" value="CreatedOn"/>
+		<property name="com.jaspersoft.studio.field.label" value="CreatedOn"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customeraddresses"/>
+	</field>
+	<field name="COLUMN_173" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="LastModifiedBy"/>
+		<property name="com.jaspersoft.studio.field.label" value="LastModifiedBy"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customeraddresses"/>
+	</field>
+	<field name="COLUMN_174" class="java.time.LocalDateTime">
+		<property name="com.jaspersoft.studio.field.name" value="LastModifiedOn"/>
+		<property name="com.jaspersoft.studio.field.label" value="LastModifiedOn"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customeraddresses"/>
+	</field>
+	<field name="CustomerMasterId" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="CustomerMasterId"/>
+		<property name="com.jaspersoft.studio.field.label" value="CustomerMasterId"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customeraddresses"/>
+	</field>
+	<field name="COLUMN_176" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="Id"/>
+		<property name="com.jaspersoft.studio.field.label" value="Id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customershippingaddresses"/>
+	</field>
+	<field name="ShippingAddress" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ShippingAddress"/>
+		<property name="com.jaspersoft.studio.field.label" value="ShippingAddress"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customershippingaddresses"/>
+	</field>
+	<field name="COLUMN_178" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="GooglePinLocation"/>
+		<property name="com.jaspersoft.studio.field.label" value="GooglePinLocation"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customershippingaddresses"/>
+	</field>
+	<field name="COLUMN_179" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="SameAsAddress"/>
+		<property name="com.jaspersoft.studio.field.label" value="SameAsAddress"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customershippingaddresses"/>
+	</field>
+	<field name="COLUMN_180" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="IsActive"/>
+		<property name="com.jaspersoft.studio.field.label" value="IsActive"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customershippingaddresses"/>
+	</field>
+	<field name="COLUMN_181" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CreatedBy"/>
+		<property name="com.jaspersoft.studio.field.label" value="CreatedBy"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customershippingaddresses"/>
+	</field>
+	<field name="COLUMN_182" class="java.time.LocalDateTime">
+		<property name="com.jaspersoft.studio.field.name" value="CreatedOn"/>
+		<property name="com.jaspersoft.studio.field.label" value="CreatedOn"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customershippingaddresses"/>
+	</field>
+	<field name="COLUMN_183" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="LastModifiedBy"/>
+		<property name="com.jaspersoft.studio.field.label" value="LastModifiedBy"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customershippingaddresses"/>
+	</field>
+	<field name="COLUMN_184" class="java.time.LocalDateTime">
+		<property name="com.jaspersoft.studio.field.name" value="LastModifiedOn"/>
+		<property name="com.jaspersoft.studio.field.label" value="LastModifiedOn"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customershippingaddresses"/>
+	</field>
+	<field name="COLUMN_185" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="CustomerMasterId"/>
+		<property name="com.jaspersoft.studio.field.label" value="CustomerMasterId"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customershippingaddresses"/>
+	</field>
+	<field name="COLUMN_186" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="Id"/>
+		<property name="com.jaspersoft.studio.field.label" value="Id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companybankings"/>
+	</field>
+	<field name="BankName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="BankName"/>
+		<property name="com.jaspersoft.studio.field.label" value="BankName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companybankings"/>
+	</field>
+	<field name="Branch" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Branch"/>
+		<property name="com.jaspersoft.studio.field.label" value="Branch"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companybankings"/>
+	</field>
+	<field name="AccountNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="AccountNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="AccountNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companybankings"/>
+	</field>
+	<field name="IFSCCode" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="IFSCCode"/>
+		<property name="com.jaspersoft.studio.field.label" value="IFSCCode"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companybankings"/>
+	</field>
+	<field name="SwiftCode" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="SwiftCode"/>
+		<property name="com.jaspersoft.studio.field.label" value="SwiftCode"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companybankings"/>
+	</field>
+	<field name="IBANCode" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="IBANCode"/>
+		<property name="com.jaspersoft.studio.field.label" value="IBANCode"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companybankings"/>
+	</field>
+	<field name="Primary" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="Primary"/>
+		<property name="com.jaspersoft.studio.field.label" value="Primary"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companybankings"/>
+	</field>
+	<field name="COLUMN_194" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="IsActive"/>
+		<property name="com.jaspersoft.studio.field.label" value="IsActive"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companybankings"/>
+	</field>
+	<field name="COLUMN_195" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CreatedBy"/>
+		<property name="com.jaspersoft.studio.field.label" value="CreatedBy"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companybankings"/>
+	</field>
+	<field name="COLUMN_196" class="java.time.LocalDateTime">
+		<property name="com.jaspersoft.studio.field.name" value="CreatedOn"/>
+		<property name="com.jaspersoft.studio.field.label" value="CreatedOn"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companybankings"/>
+	</field>
+	<field name="COLUMN_197" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="LastModifiedBy"/>
+		<property name="com.jaspersoft.studio.field.label" value="LastModifiedBy"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companybankings"/>
+	</field>
+	<field name="COLUMN_198" class="java.time.LocalDateTime">
+		<property name="com.jaspersoft.studio.field.name" value="LastModifiedOn"/>
+		<property name="com.jaspersoft.studio.field.label" value="LastModifiedOn"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companybankings"/>
+	</field>
+	<field name="CompanyMasterId" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="CompanyMasterId"/>
+		<property name="com.jaspersoft.studio.field.label" value="CompanyMasterId"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companybankings"/>
+	</field>
+	<field name="COLUMN_200" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="Id"/>
+		<property name="com.jaspersoft.studio.field.label" value="Id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="CompanyId" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CompanyId"/>
+		<property name="com.jaspersoft.studio.field.label" value="CompanyId"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_202" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CompanyName"/>
+		<property name="com.jaspersoft.studio.field.label" value="CompanyName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="CompanyAliasName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CompanyAliasName"/>
+		<property name="com.jaspersoft.studio.field.label" value="CompanyAliasName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="CompanyType" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CompanyType"/>
+		<property name="com.jaspersoft.studio.field.label" value="CompanyType"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_205" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Address"/>
+		<property name="com.jaspersoft.studio.field.label" value="Address"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_206" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="City"/>
+		<property name="com.jaspersoft.studio.field.label" value="City"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_207" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="State"/>
+		<property name="com.jaspersoft.studio.field.label" value="State"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_208" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Country"/>
+		<property name="com.jaspersoft.studio.field.label" value="Country"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_209" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PinZipCode"/>
+		<property name="com.jaspersoft.studio.field.label" value="PinZipCode"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="PurchaseGroup" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PurchaseGroup"/>
+		<property name="com.jaspersoft.studio.field.label" value="PurchaseGroup"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_211" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="BoardNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="BoardNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_212" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Website"/>
+		<property name="com.jaspersoft.studio.field.label" value="Website"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_213" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="GeneralEmail"/>
+		<property name="com.jaspersoft.studio.field.label" value="GeneralEmail"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_214" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Currency"/>
+		<property name="com.jaspersoft.studio.field.label" value="Currency"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_215" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="GooglePinLocation"/>
+		<property name="com.jaspersoft.studio.field.label" value="GooglePinLocation"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_216" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TypeOfCompany"/>
+		<property name="com.jaspersoft.studio.field.label" value="TypeOfCompany"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_217" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ExportUnitType"/>
+		<property name="com.jaspersoft.studio.field.label" value="ExportUnitType"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_218" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="GeneralMSME"/>
+		<property name="com.jaspersoft.studio.field.label" value="GeneralMSME"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="RelatedCompanyName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="RelatedCompanyName"/>
+		<property name="com.jaspersoft.studio.field.label" value="RelatedCompanyName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="RelatedCompanyAlias" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="RelatedCompanyAlias"/>
+		<property name="com.jaspersoft.studio.field.label" value="RelatedCompanyAlias"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_221" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NatureOfRelationship"/>
+		<property name="com.jaspersoft.studio.field.label" value="NatureOfRelationship"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_222" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Advance"/>
+		<property name="com.jaspersoft.studio.field.label" value="Advance"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_223" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PaymentTerms"/>
+		<property name="com.jaspersoft.studio.field.label" value="PaymentTerms"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="IncoTerm" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="IncoTerm"/>
+		<property name="com.jaspersoft.studio.field.label" value="IncoTerm"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_225" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="SpecialTerms"/>
+		<property name="com.jaspersoft.studio.field.label" value="SpecialTerms"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="PreferredFreightForwader" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PreferredFreightForwader"/>
+		<property name="com.jaspersoft.studio.field.label" value="PreferredFreightForwader"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_227" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Others"/>
+		<property name="com.jaspersoft.studio.field.label" value="Others"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="InCoporation" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="InCoporation"/>
+		<property name="com.jaspersoft.studio.field.label" value="InCoporation"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_229" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="TIN"/>
+		<property name="com.jaspersoft.studio.field.label" value="TIN"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_230" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="GST"/>
+		<property name="com.jaspersoft.studio.field.label" value="GST"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_231" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="IEC"/>
+		<property name="com.jaspersoft.studio.field.label" value="IEC"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_232" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="PAN"/>
+		<property name="com.jaspersoft.studio.field.label" value="PAN"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_233" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="UdhyamCertificate"/>
+		<property name="com.jaspersoft.studio.field.label" value="UdhyamCertificate"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_234" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="MSME"/>
+		<property name="com.jaspersoft.studio.field.label" value="MSME"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="ISO" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="ISO"/>
+		<property name="com.jaspersoft.studio.field.label" value="ISO"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="AS" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="AS"/>
+		<property name="com.jaspersoft.studio.field.label" value="AS"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="Medical" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="Medical"/>
+		<property name="com.jaspersoft.studio.field.label" value="Medical"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="NADCAP" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="NADCAP"/>
+		<property name="com.jaspersoft.studio.field.label" value="NADCAP"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="TurnOver3years" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TurnOver3years"/>
+		<property name="com.jaspersoft.studio.field.label" value="TurnOver3years"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="DNBHooversNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="DNBHooversNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="DNBHooversNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_241" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ICRA"/>
+		<property name="com.jaspersoft.studio.field.label" value="ICRA"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_242" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="HeadCount"/>
+		<property name="com.jaspersoft.studio.field.label" value="HeadCount"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_243" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Capacity"/>
+		<property name="com.jaspersoft.studio.field.label" value="Capacity"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_244" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="UOM"/>
+		<property name="com.jaspersoft.studio.field.label" value="UOM"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_245" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="FloorSpace"/>
+		<property name="com.jaspersoft.studio.field.label" value="FloorSpace"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_246" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Sqft"/>
+		<property name="com.jaspersoft.studio.field.label" value="Sqft"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_247" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Machine"/>
+		<property name="com.jaspersoft.studio.field.label" value="Machine"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="ToolsandEquip" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ToolsandEquip"/>
+		<property name="com.jaspersoft.studio.field.label" value="ToolsandEquip"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="ERPvalue" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ERPvalue"/>
+		<property name="com.jaspersoft.studio.field.label" value="ERPvalue"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_250" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="ERP"/>
+		<property name="com.jaspersoft.studio.field.label" value="ERP"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_251" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ESDSetup"/>
+		<property name="com.jaspersoft.studio.field.label" value="ESDSetup"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_252" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="HazmatSetup"/>
+		<property name="com.jaspersoft.studio.field.label" value="HazmatSetup"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="OSPvalue" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="OSPvalue"/>
+		<property name="com.jaspersoft.studio.field.label" value="OSPvalue"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_254" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="OSP"/>
+		<property name="com.jaspersoft.studio.field.label" value="OSP"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_255" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ScopeOfSupply"/>
+		<property name="com.jaspersoft.studio.field.label" value="ScopeOfSupply"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="CompanyCategory" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CompanyCategory"/>
+		<property name="com.jaspersoft.studio.field.label" value="CompanyCategory"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_257" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="BasisOfApproval"/>
+		<property name="com.jaspersoft.studio.field.label" value="BasisOfApproval"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="InventoryItem" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="InventoryItem"/>
+		<property name="com.jaspersoft.studio.field.label" value="InventoryItem"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_259" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CustomerApprove"/>
+		<property name="com.jaspersoft.studio.field.label" value="CustomerApprove"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="ApprovalStatus" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ApprovalStatus"/>
+		<property name="com.jaspersoft.studio.field.label" value="ApprovalStatus"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_261" class="java.time.LocalDateTime">
+		<property name="com.jaspersoft.studio.field.name" value="ApprovalDate"/>
+		<property name="com.jaspersoft.studio.field.label" value="ApprovalDate"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_262" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ApprovalBy"/>
+		<property name="com.jaspersoft.studio.field.label" value="ApprovalBy"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_263" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Upload"/>
+		<property name="com.jaspersoft.studio.field.label" value="Upload"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_264" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="ReAudit"/>
+		<property name="com.jaspersoft.studio.field.label" value="ReAudit"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_265" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="AuditFrequency"/>
+		<property name="com.jaspersoft.studio.field.label" value="AuditFrequency"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_266" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Unit"/>
+		<property name="com.jaspersoft.studio.field.label" value="Unit"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_267" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CreatedBy"/>
+		<property name="com.jaspersoft.studio.field.label" value="CreatedBy"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_268" class="java.time.LocalDateTime">
+		<property name="com.jaspersoft.studio.field.name" value="CreatedOn"/>
+		<property name="com.jaspersoft.studio.field.label" value="CreatedOn"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_269" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="LastModifiedBy"/>
+		<property name="com.jaspersoft.studio.field.label" value="LastModifiedBy"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_270" class="java.time.LocalDateTime">
+		<property name="com.jaspersoft.studio.field.name" value="LastModifiedOn"/>
+		<property name="com.jaspersoft.studio.field.label" value="LastModifiedOn"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_271" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="IsActive"/>
+		<property name="com.jaspersoft.studio.field.label" value="IsActive"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="CompanyApprove" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CompanyApprove"/>
+		<property name="com.jaspersoft.studio.field.label" value="CompanyApprove"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companymasters"/>
+	</field>
+	<field name="COLUMN_273" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="Id"/>
+		<property name="com.jaspersoft.studio.field.label" value="Id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="Salutation" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Salutation"/>
+		<property name="com.jaspersoft.studio.field.label" value="Salutation"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="CallName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CallName"/>
+		<property name="com.jaspersoft.studio.field.label" value="CallName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="MobileNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MobileNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="MobileNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="MobileCountryCode" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MobileCountryCode"/>
+		<property name="com.jaspersoft.studio.field.label" value="MobileCountryCode"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="LandLine" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="LandLine"/>
+		<property name="com.jaspersoft.studio.field.label" value="LandLine"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="TimeToCall" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TimeToCall"/>
+		<property name="com.jaspersoft.studio.field.label" value="TimeToCall"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="COLUMN_280" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="Primary"/>
+		<property name="com.jaspersoft.studio.field.label" value="Primary"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="FirstName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="FirstName"/>
+		<property name="com.jaspersoft.studio.field.label" value="FirstName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="LastName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="LastName"/>
+		<property name="com.jaspersoft.studio.field.label" value="LastName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="Designation" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Designation"/>
+		<property name="com.jaspersoft.studio.field.label" value="Designation"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="Department" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Department"/>
+		<property name="com.jaspersoft.studio.field.label" value="Department"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="AlternateMobileNumber" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="AlternateMobileNumber"/>
+		<property name="com.jaspersoft.studio.field.label" value="AlternateMobileNumber"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="AlternateMobileCountryCode" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="AlternateMobileCountryCode"/>
+		<property name="com.jaspersoft.studio.field.label" value="AlternateMobileCountryCode"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="SkypeId" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="SkypeId"/>
+		<property name="com.jaspersoft.studio.field.label" value="SkypeId"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="COLUMN_288" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="IsActive"/>
+		<property name="com.jaspersoft.studio.field.label" value="IsActive"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="Email" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Email"/>
+		<property name="com.jaspersoft.studio.field.label" value="Email"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="Extension" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Extension"/>
+		<property name="com.jaspersoft.studio.field.label" value="Extension"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="Language" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Language"/>
+		<property name="com.jaspersoft.studio.field.label" value="Language"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="COLUMN_292" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CreatedBy"/>
+		<property name="com.jaspersoft.studio.field.label" value="CreatedBy"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="COLUMN_293" class="java.time.LocalDateTime">
+		<property name="com.jaspersoft.studio.field.name" value="CreatedOn"/>
+		<property name="com.jaspersoft.studio.field.label" value="CreatedOn"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="COLUMN_294" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="LastModifiedBy"/>
+		<property name="com.jaspersoft.studio.field.label" value="LastModifiedBy"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="COLUMN_295" class="java.time.LocalDateTime">
+		<property name="com.jaspersoft.studio.field.name" value="LastModifiedOn"/>
+		<property name="com.jaspersoft.studio.field.label" value="LastModifiedOn"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="COLUMN_296" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="CustomerMasterId"/>
+		<property name="com.jaspersoft.studio.field.label" value="CustomerMasterId"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="customercontacts"/>
+	</field>
+	<field name="FinalTaxAmt" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="FinalTaxAmt"/>
+		<property name="com.jaspersoft.studio.field.label" value="FinalTaxAmt"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="57" splitType="Stretch">
+			<rectangle>
+				<reportElement x="8" y="-1" width="552" height="56" uuid="000c3018-b9dc-4539-a8a7-88f6f09a9b2e">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="390" y="14" width="48" height="18" uuid="31ef6f61-26b5-4fb6-bc96-4d54bca9e4d0"/>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="430" y="13" width="124" height="19" uuid="bac8a1b2-71b8-4232-b2e9-bb4b33328c3b"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="241" y="-20" width="84" height="19" uuid="1ef8dbfd-a0a2-4294-884a-dc6f68cdb7d1"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INVOICE]]></text>
+			</staticText>
+			<image>
+				<reportElement x="16" y="10" width="129" height="30" uuid="8f26cd51-3250-4756-a579-e178b169394a"/>
+				<imageExpression><![CDATA["/TRASCCON LOGO.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="303" splitType="Stretch">
+			<staticText>
+				<reportElement x="6" y="35" width="90" height="24" uuid="045e99da-3d14-498e-8a79-91bdfe4e2fb6">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[DO Number]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="8" y="-1" width="552" height="277" uuid="15f7758e-8815-49b8-b230-4f354caa25ec">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="8" y="96" width="552" height="20" backcolor="#1A0B0B" uuid="88ff7439-54db-46cd-84d9-4c442b720765">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="12" y="171" width="100" height="24" uuid="8e8a672c-efcd-4059-b714-61e80e3dc2e0">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Name  :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="116" y="171" width="130" height="24" uuid="4f104e7e-6875-4892-bcee-0717c1409c02">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CallName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="116" y="199" width="130" height="24" uuid="05735816-048c-4838-94f7-3cee911661f9">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MobileNumber}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="199" width="100" height="24" uuid="95490c1b-d1d8-4967-9960-4db04705d79a">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Mobile	]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="227" width="100" height="24" uuid="b4c1c521-471b-4b48-9401-d790f6a61c98">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Fax	]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="113" y="254" width="130" height="24" uuid="ba9a9b67-5e05-4932-b31f-8412bd34efb5">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Website}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="254" width="100" height="24" uuid="e6c4e2a8-4085-4c7c-b6b6-6e5ccb27f154">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Website	]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="172" width="100" height="24" uuid="28c26a43-9c4c-4eba-8f24-c20282b31b39">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Phone]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="199" width="100" height="24" uuid="ae91b986-7bf2-4bed-9b7c-d2a4207c596c">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Mobile	]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="227" width="100" height="24" uuid="d48b7ece-a6df-414d-9a63-9134080bb607">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Fax	]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="254" width="100" height="24" uuid="56927d18-80bc-46bf-9ec5-fba88c7c6d03">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Website	]]></text>
+			</staticText>
+			<line>
+				<reportElement x="273" y="114" width="1" height="165" uuid="7f3c89d9-6df9-48f6-b6c4-d40b13463b62"/>
+			</line>
+			<staticText>
+				<reportElement x="10" y="15" width="90" height="24" uuid="7fa1b9e9-8dd7-4526-b684-2631baf81385">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[InvoiceNumber :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="203" y="15" width="104" height="24" uuid="f1e839c6-22d8-401d-a2b6-388d1b13f4ad">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Customer Name  :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="411" y="15" width="70" height="24" uuid="79c8d12b-e24e-4330-8c29-462b04d1f132">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Lead ID         :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="203" y="42" width="94" height="24" uuid="d5153e60-d31a-490f-b16a-4fce0e969df8">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Sales Order No   :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="42" width="90" height="24" uuid="317b073b-070e-4a7d-a4d3-b2923d084cba">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[DO Number      :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="72" width="90" height="22" uuid="ee55cc22-916a-441e-80dc-2dc569e6507e">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Invoice Date     :
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="99" y="97" width="80" height="18" forecolor="#FAFAFA" backcolor="#FFFFFF" uuid="4e830dca-e23c-4ab0-841b-a7ac1f96899c"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[BILL TO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="341" y="97" width="80" height="18" forecolor="#FAFAFA" backcolor="#FFFFFF" uuid="c9158454-a967-4186-b1eb-2d535ba3d923"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[SHIP TO]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="8" y="276" width="552" height="23" uuid="9589a133-0471-458c-821d-1317d59db4c3"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="4" y="281" width="39" height="16" uuid="af6cf291-de38-4b65-aec7-4ec03ca97e37"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ S.No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="48" y="281" width="86" height="19" uuid="d2f3267f-074e-4b03-94d2-b4f84a50a183"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ KPN No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="174" y="281" width="118" height="19" uuid="e98809d8-453f-47be-8941-70fb7f76bf78"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Description:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="353" y="281" width="36" height="19" uuid="0b3255e0-cc7c-4c9b-8416-468fb14c93da"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[UOM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="388" y="280" width="35" height="19" uuid="a3de49e4-9a0d-44b8-9943-a8e5f057a721"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="435" y="281" width="60" height="19" uuid="8e62b47a-5662-47f6-a69b-151739524b89"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Unit Price]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="488" y="281" width="71" height="19" uuid="4e12b630-6606-423e-96f2-64c550896d82"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Value]]></text>
+			</staticText>
+			<line>
+				<reportElement x="42" y="279" width="1" height="19" uuid="25300b15-fcbc-4c5b-94fe-c6e4c323ebc9"/>
+			</line>
+			<line>
+				<reportElement x="138" y="279" width="1" height="19" uuid="48fbffd5-91af-4083-9d3d-86b9b7bf8f2b"/>
+			</line>
+			<line>
+				<reportElement x="358" y="279" width="1" height="19" uuid="b27a0e31-8439-46f6-a182-cf9795fcb44a"/>
+			</line>
+			<line>
+				<reportElement x="390" y="279" width="1" height="19" uuid="cd312d7f-ddce-4ecc-a9ff-d91066aa5f9e"/>
+			</line>
+			<line>
+				<reportElement x="425" y="279" width="1" height="19" uuid="735a7420-a05c-4a41-8b99-14166e6c45b0"/>
+			</line>
+			<line>
+				<reportElement x="495" y="279" width="1" height="19" uuid="23176b2a-091b-453a-8259-3917d724d118"/>
+			</line>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="103" y="72" width="100" height="22" uuid="ffe4fd05-8060-4a17-9803-10b261619fdc"/>
+				<textFieldExpression><![CDATA[$F{CreatedOn}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="101" y="15" width="100" height="24" uuid="6ae68ed6-3da0-40a2-9ef4-db2e3ca50425"/>
+				<textFieldExpression><![CDATA[$F{InvoiceNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="101" y="42" width="100" height="24" uuid="a2fcd36c-27a0-4cd2-b8e7-bf97b146ef9f"/>
+				<textFieldExpression><![CDATA[$F{DONumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="296" y="16" width="115" height="24" uuid="5c3cb7d3-7106-4f49-8e3a-05a165baa94f"/>
+				<textFieldExpression><![CDATA[$F{CustomerName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="482" y="15" width="72" height="24" uuid="8d314832-966b-4ed7-b79b-6fa901ceda30"/>
+				<textFieldExpression><![CDATA[$F{LeadId}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="15" y="120" width="231" height="47" uuid="9f6904a6-d462-4267-bc87-8e676e6a19d0">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{BillTo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="281" y="121" width="249" height="47" uuid="b639314b-a8b7-410d-9efb-1bf158789524">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{ShipTo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="297" y="41" width="100" height="24" uuid="570d77f9-7863-4914-a2b7-b4b07a605a41"/>
+				<textFieldExpression><![CDATA[$F{SalesOrderNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="384" y="176" width="130" height="24" uuid="1e23f755-9b78-46d3-8d70-e27084737c3d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CallName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="384" y="203" width="130" height="24" uuid="71408bc6-5060-4707-bc56-6c35537307fe">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MobileNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="381" y="258" width="130" height="24" uuid="316aca5b-2dd3-4dda-b8b3-95b47acf5bda">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Website}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<rectangle>
+				<reportElement x="8" y="-3" width="552" height="22" uuid="0944d6a0-d67c-47c4-a30e-86bc9f9e3dbc"/>
+			</rectangle>
+			<textField>
+				<reportElement x="6" y="-1" width="31" height="19" uuid="18e7a9ac-ef0e-4385-87c4-2606583f2702"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="42" y="-2" width="1" height="21" uuid="e29c75a7-bff0-433f-b531-1169a15e6fa1"/>
+			</line>
+			<line>
+				<reportElement x="138" y="-3" width="1" height="21" uuid="555afb3b-3105-4a0e-aa77-b5a7c1ffee2c"/>
+			</line>
+			<line>
+				<reportElement x="358" y="-2" width="1" height="21" uuid="dd9adf11-3ff6-4f37-a256-ee950d814d1d"/>
+			</line>
+			<line>
+				<reportElement x="390" y="-2" width="1" height="21" uuid="d6fe1d65-e0fd-44d5-a89e-505532b8b5aa"/>
+			</line>
+			<line>
+				<reportElement x="425" y="-2" width="1" height="21" uuid="045c641d-3f16-4ba7-a178-71155b19f3cf"/>
+			</line>
+			<line>
+				<reportElement x="495" y="-2" width="1" height="21" uuid="3ecba8da-a5ac-4a9f-acfe-435fe5c6eecc"/>
+			</line>
+			<textField>
+				<reportElement x="45" y="-1" width="91" height="19" uuid="1c5a5b87-8cec-4b3a-9689-6212f3852ad3"/>
+				<textElement textAlignment="Left">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FGItemNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="141" y="-1" width="216" height="19" uuid="972ec18a-c56c-4457-9faf-16d1519f34f4"/>
+				<textElement textAlignment="Left">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Description}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="361" y="-1" width="26" height="19" uuid="e177bd80-ea1c-47fc-a92a-bb8fefd35087"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{UOM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="388" y="-2" width="35" height="19" uuid="7fc72122-b988-4590-8c2a-476a8b4c8f19"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{InvoicedQty}.setScale(2, RoundingMode.UNNECESSARY)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="425" y="-1" width="67" height="19" uuid="e409b19c-ee1f-4fa9-8c0f-56d964834630"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{UnitPrice}.setScale(2, RoundingMode.UNNECESSARY)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="489" y="0" width="69" height="19" uuid="3c553144-045c-4a8c-b73d-bbe0f58283b7"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalValue}.setScale(2, RoundingMode.UNNECESSARY)]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="255" splitType="Stretch">
+			<rectangle>
+				<reportElement x="7" y="43" width="553" height="180" uuid="fc851144-9031-4379-a770-2d177d99220c"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="7" y="39" width="553" height="20" backcolor="#D3D3D3" uuid="1afe36e1-fdc9-44ce-ad91-627fff110901"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="11" y="67" width="113" height="24" uuid="872dd1aa-32a2-475a-b171-692c7ed29c37">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Name                   :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="93" width="113" height="24" uuid="c5cd6211-4347-4440-b3e8-15a3b458265d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Account Number  :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="119" width="113" height="24" uuid="2c390a07-2d8b-4ce2-b945-4b3ab19d8e4d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Bank                    :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="146" width="113" height="24" uuid="2697cd08-9f0f-48f8-8868-0e92641051ec">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[IFSC                    :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="172" width="113" height="24" uuid="0a5be380-144f-487a-8dbf-f301c6ee8ad4">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Branch                 :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="198" width="113" height="24" uuid="f9287db8-8718-46f4-b7dc-4c7c0865aa0e">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[MICR Code          :
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="125" y="121" width="200" height="24" uuid="e09bad08-868e-4f11-9614-dad7181f9096">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{BankName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="125" y="148" width="200" height="24" uuid="217b7134-1e56-42a3-bf17-ebf052aceae5">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{IFSCCode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="125" y="172" width="200" height="24" uuid="a699f287-6dd7-439f-9c5e-1466eb82fa5f">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{Branch}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="125" y="95" width="200" height="24" uuid="2368e613-fd80-47c6-8419-b67ddb9f37e7">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{AccountNumber}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="8" y="-2" width="552" height="40" uuid="11f76a2d-e04e-466e-a48e-c229b8082310"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="6" y="-1" width="39" height="38" uuid="d668a0c8-d397-440e-a112-2daba2c725b9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Amount 
+in Words ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="42" y="0" width="40" height="36" uuid="c1ecf4bd-6a9e-4f97-a1b5-49f7d7a219a5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[INR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="425" y="-1" width="70" height="38" uuid="82b395d8-c4de-4333-b78d-cc822575bcb1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ Total With Tax]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="210" y="40" width="131" height="21" uuid="83ec6533-5382-4930-94d4-3b7445221222"/>
+				<textElement>
+					<font fontName="Times New Roman" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Accounts Details]]></text>
+			</staticText>
+			<line>
+				<reportElement x="42" y="-1" width="1" height="40" uuid="e97e28a3-2e85-4356-9d14-b9aa4604e38f"/>
+			</line>
+			<line>
+				<reportElement x="425" y="-1" width="1" height="40" uuid="6278e49b-559b-47a0-9f7f-eb77c478cb16"/>
+			</line>
+			<line>
+				<reportElement x="495" y="0" width="1" height="40" uuid="cf88a24f-52d1-4900-9825-8ba1663915ef"/>
+			</line>
+			<line>
+				<reportElement x="3" y="223" width="553" height="1" uuid="df975ba4-2128-4455-8f50-8bd4ef2f7630"/>
+			</line>
+			<textField>
+				<reportElement x="124" y="67" width="200" height="24" uuid="593f9c64-59bd-461f-b0aa-25deaf69732f">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{CompanyName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="496" y="5" width="63" height="30" uuid="aa257b41-15a3-468d-9bc6-6946033c5534"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FinalTaxAmt}.setScale(2, RoundingMode.UNNECESSARY)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="124" y="199" width="201" height="22" uuid="20cddd3a-6083-41b6-a7d6-33cb1dce71f9"/>
+				<textFieldExpression><![CDATA[$F{IBANCode}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
